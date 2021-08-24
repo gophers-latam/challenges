@@ -23,5 +23,6 @@ func createApp() *fiber.App {
 
 	app.Add(http.MethodGet, "/health", HealthCheckHandler)
 	app.Add(http.MethodPost, "/challenges", challengeSvc.CreateChallengeHandler)
+	app.Add(http.MethodGet, "/challenges", challengeSvc.GetChallengeHandler)
 	return app
 }

@@ -27,3 +27,16 @@ func (c *ChallengeService) CreateChallengeHandler(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(&challenge)
 }
+
+func (c *ChallengeService) GetChallengeHandler(ctx *fiber.Ctx) error {
+	level := ctx.Query("level")
+	challengeType := ctx.Query("type")
+
+	res, err := c.GetChallenge(level, challengeType)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(res)
+}
