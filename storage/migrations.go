@@ -2,7 +2,7 @@ package storage
 
 import (
 	"github.com/tomiok/challenge-svc/challenges"
-	"log"
+	"go.uber.org/zap"
 )
 
 func Migrate() {
@@ -11,7 +11,6 @@ func Migrate() {
 	err := db.AutoMigrate(challenges.Challenge{})
 
 	if err != nil {
-		log.Print(err.Error())
-		panic("cannot do migration :( ")
+		zap.S().Fatal("cannot do migration, %s", err.Error())
 	}
 }
