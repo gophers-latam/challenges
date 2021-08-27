@@ -3,6 +3,7 @@ package challenges
 import (
 	"github.com/gofiber/fiber/v2"
 	"log"
+	"strings"
 )
 
 type ChallengeService struct {
@@ -32,7 +33,10 @@ func (c *ChallengeService) GetChallengesHandler(ctx *fiber.Ctx) error {
 	level := ctx.Query("level")
 	challengeType := ctx.Query("type")
 
-	res, err := c.GetChallenge(level, challengeType)
+	level = strings.ToLower(strings.TrimSpace(level))
+	challengeType = strings.ToLower(strings.TrimSpace(challengeType))
+
+	res, err := c.GetChallenges(Level(level), ChallengeType(challengeType))
 
 	if err != nil {
 		return err

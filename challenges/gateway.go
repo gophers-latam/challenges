@@ -11,9 +11,17 @@ func (g *ChallengeGateway) CreateChallenge(c Challenge) (Challenge, error) {
 	return c, err
 }
 
-func (g *ChallengeGateway) GetChallenge(level, challengeType string) ([]Challenge, error) {
+func (g *ChallengeGateway) GetChallenges(level Level, challengeType ChallengeType) ([]Challenge, error) {
 	var result []Challenge
-	err := g.Find(&result, "level = ? and challenge_type = ?", level, challengeType).Error
 
+	if _, ok := Levels[level]; !ok {
+		level = "default"
+	}
+
+	if _, ok := ChallengeTypes[challengeType]; !ok {
+		challengeType = "default"
+	}
+
+	err := g.Find(&result, "level = ? and challenge_type = ?", level, challengeType).Error
 	return result, err
 }
