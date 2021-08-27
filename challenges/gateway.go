@@ -15,11 +15,11 @@ func (g *ChallengeGateway) GetChallenges(level Level, challengeType ChallengeTyp
 	var result []Challenge
 
 	if _, ok := Levels[level]; !ok {
-		level = "default"
+		level = defaultValue
 	}
 
 	if _, ok := ChallengeTypes[challengeType]; !ok {
-		challengeType = "default"
+		challengeType = defaultValue
 	}
 
 	err := g.Find(&result, "level = ? and challenge_type = ?", level, challengeType).Error
