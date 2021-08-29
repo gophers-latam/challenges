@@ -3,7 +3,9 @@ package challenges
 import (
 	"github.com/gofiber/fiber/v2"
 	"log"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 type ChallengeService struct {
@@ -42,5 +44,15 @@ func (c *ChallengeService) GetChallengesHandler(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.JSON(res)
+	l := len(res)
+	if l == 0 {
+		return ctx.JSON(&Challenge{})
+	}
+
+	if l == 1 {
+		return ctx.JSON(res[0])
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return ctx.JSON(res[r.Intn(l-1)])
 }
