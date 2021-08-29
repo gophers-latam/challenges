@@ -9,9 +9,9 @@ import (
 	"net/http"
 )
 
-func start(port string) {
+func start(port string) error {
 	app := createApp()
-	app.Listen(":" + port)
+	return app.Listen(":" + port)
 }
 
 func createApp() *fiber.App {

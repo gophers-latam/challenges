@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"log"
 	"math/rand"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -46,7 +47,10 @@ func (c *ChallengeService) GetChallengesHandler(ctx *fiber.Ctx) error {
 
 	l := len(res)
 	if l == 0 {
-		return ctx.JSON(&Challenge{})
+		ctx.Status(http.StatusNotFound)
+		return ctx.JSON(struct {
+			Message string `json:"message"`
+		}{Message: "not challenges found"})
 	}
 
 	if l == 1 {

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/tomiok/challenge-svc/logs"
 	"github.com/tomiok/challenge-svc/storage"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -14,5 +15,5 @@ func main() {
 		port = "5000"
 	}
 
-	start(port)
+	zap.L().Fatal("cannot init server", zap.Error(start(port)))
 }
