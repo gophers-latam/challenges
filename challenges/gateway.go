@@ -31,7 +31,7 @@ func (g *ChallengeGateway) GetChallenges(level Level, challengeType ChallengeTyp
 
 func (g *ChallengeGateway) GetChallengeById(id int) (*Challenge, error) {
 	var result Challenge
-	err := g.Find("id=?", id).First(&result).Error
+	err := g.Model(&Challenge{}).Find(&result, "id=?",id).Error
 
 	if err != nil {
 		zap.L().Error("cannot get challenge", zap.Error(err))

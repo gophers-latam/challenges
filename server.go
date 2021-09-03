@@ -34,7 +34,7 @@ func createApp() *fiber.App {
 	app.Add(http.MethodGet, "/health", HealthCheckHandler)
 	app.Add(http.MethodPost, "/challenges", challengeSvc.CreateChallengeHandler)
 	app.Add(http.MethodGet, "/challenges", challengeSvc.GetChallengesHandler)
-	app.Use(challenges.AuthMiddleware("123")).Add(http.MethodGet, "/once", challengeSvc.GetChallengeByIdHandler)
+	app.Add(http.MethodGet, "/once", challengeSvc.GetChallengeByIdHandler)
 
 	return app
 }
