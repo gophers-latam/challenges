@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -59,4 +60,20 @@ func (c *ChallengeService) GetChallengesHandler(ctx *fiber.Ctx) error {
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return ctx.JSON(res[r.Intn(l-1)])
+}
+
+func (c *ChallengeService) GetChallengeByIdHandler(ctx *fiber.Ctx) error {
+	challengeID, err := strconv.ParseInt(ctx.Query("id"), 10, 64)
+
+	if err != nil {
+		return err
+	}
+
+	res, err := c.GetChallengeById(int(challengeID))
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(res)
 }

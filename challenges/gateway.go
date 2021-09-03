@@ -1,6 +1,9 @@
 package challenges
 
-import "gorm.io/gorm"
+import (
+	"go.uber.org/zap"
+	"gorm.io/gorm"
+)
 
 type ChallengeGateway struct {
 	*gorm.DB
@@ -24,4 +27,16 @@ func (g *ChallengeGateway) GetChallenges(level Level, challengeType ChallengeTyp
 
 	err := g.Find(&result, "level = ? and challenge_type = ?", level, challengeType).Error
 	return result, err
+}
+
+func (g *ChallengeGateway) GetChallengeById(id int) (*Challenge, error) {
+	var result Challenge
+	err := g.Find("id=?", id).First(&result).Error
+
+	if err != nil {
+		zap.L().Error("cannot get challenge", zap.Error(err))
+		return nil, err
+	}
+
+	return &result, nil
 }
