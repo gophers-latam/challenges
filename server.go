@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -19,6 +20,22 @@ func createApp() *fiber.App {
 	engine := html.New("./views", ".html")
 	app := fiber.New(fiber.Config{
 		Views: engine,
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			code := fiber.StatusInternalServerError
+
+			// Retrieve the custom status code if it's a fiber.*Error
+			if e, ok := err.(*fiber.Error); ok {
+				code = e.Code
+			}
+			err = ctx.Status(code).SendFile(fmt.Sprintf("./views/%d.html", code))
+			if err != nil {
+				// In case the SendFile fails
+				return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+			}
+
+			// Return from handler
+			return nil
+		},
 	})
 	// middlewares
 	app.Use(recover.New())

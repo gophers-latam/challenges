@@ -72,7 +72,11 @@ func (c *ChallengeService) GetChallengeByIdHandler(ctx *fiber.Ctx) error {
 	res, err := c.GetChallengeById(int(challengeID))
 
 	if err != nil {
-		return err
+		return fiber.NewError(http.StatusBadRequest, "cannot find challenge")
+	}
+
+	if res == nil {
+		return fiber.NewError(http.StatusNotFound, "cannot find challenge")
 	}
 
 	return ctx.Render("challenges", res)
