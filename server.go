@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/template/html"
 	"github.com/tomiok/challenge-svc/challenges"
 	"github.com/tomiok/challenge-svc/storage"
 	"net/http"
@@ -15,7 +16,10 @@ func start(port string) error {
 }
 
 func createApp() *fiber.App {
-	app := fiber.New()
+	engine := html.New("./views", ".html")
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
 	// middlewares
 	app.Use(recover.New())
 	app.Use(compress.New(compress.Config{

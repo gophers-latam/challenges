@@ -75,7 +75,7 @@ func (c *ChallengeService) GetChallengeByIdHandler(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Render("challenges/assets/challenges.html", map[string]string{
+	return ctx.Render("challenges", map[string]string{
 		"challenge": "some REST API",
 	})
 }
