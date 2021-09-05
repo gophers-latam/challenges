@@ -69,13 +69,11 @@ func (c *ChallengeService) GetChallengeByIdHandler(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	_, err = c.GetChallengeById(int(challengeID))
+	res, err := c.GetChallengeById(int(challengeID))
 
 	if err != nil {
 		return err
 	}
 
-	return ctx.Render("challenges", map[string]string{
-		"challenge": "some REST API",
-	})
+	return ctx.Render("challenges", res)
 }
