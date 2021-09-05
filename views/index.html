@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gopherbot - Gophers LATAM</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/index.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css"/>
+</head>
+<body>
+<div class="container col-sm-6 col-sm-offset-3">
+    <div style="text-align: center;">
+        <h2>Envía un challenge al Gopherbot</h2>
+        <img src="./img/gophers-latam.png" height="200" alt="Gophers LATAM">
+    </div>
+
+    <form>
+        <div id="description-group" class="form-group">
+            <label for="description">Descripción:</label>
+            <textarea class="form-control" id="description" rows="3" maxlength="5000" required></textarea>
+        </div>
+
+        <div id="level-group" class="form-group">
+            <label for="level">Nivel de dificultad:</label>
+            <select class="form-select" id="level" required>
+                <option value="">- Seleccionar -</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+
+        <div id="challengetype-group" class="form-group">
+            <label for="challengetype">Tipo relacionado de desafío:</label>
+            <select class="form-select" id="challengetype" required>
+                <option value="">- Seleccionar -</option>
+                <option value="algorithm">Algorithm</option>
+                <option value="concurrency">Concurrency</option>
+                <option value="database">Database</option>
+                <option value="web">Web</option>
+                <option value="cli">CLI</option>
+                <option value="core">Core</option>
+            </select>
+        </div>
+        <br>
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Enviar</button>
+        </div>
+    </form>
+    <br>
+
+    <div class="full-height">
+        <div align="center">
+            <p class="p-center f16">
+                <a class="alink"
+                   href="https://discord.com/api/oauth2/authorize?client_id=767979098768408586&permissions=67624001&scope=bot"
+                   target="_blank"><b><u>+add Gopherbot</u></b></a>
+            </p>
+            <a href="https://discord.com/api/oauth2/authorize?client_id=767979098768408586&permissions=67624001&scope=bot"
+               target="_blank"><img alt="gopher" src="./img/gopherbot.png" height="100"/></a>
+        </div>
+        <br>
+        <p class="p-center"><b>Información y comandos (en desarrollo)</b></p>
+        <ul>
+            <li><b>bot</b> - llamar al bot</li>
+            <li><b>.go</b> - saludo del bot</li>
+            <li><b>.go ayuda</b> - ver comandos generales disponibles</li>
+            <li><b>.go libros</b> - enlaces de libros</li>
+            <li><b>.go recursos</b> - enlaces de recursos</li>
+            <li><b>.go challenge</b> - pedir desafios para practicar (en desarrollo)</li>
+            <li>...</li>
+            <li><b>Server:</b>
+                <a class="alink" href="https://discord.io/go-latam" target="_blank">https://discord.io/go-latam</a>
+            </li>
+        </ul>
+        <br>
+    </div>
+</div>
+</body>
+</html>

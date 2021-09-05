@@ -1,0 +1,31 @@
+html, body {
+	height: 100%;
+	padding-top: 8px;
+}
+
+.full-height {
+	height: 75%;
+	align-content: center;
+	padding-left: 3%;
+	padding-right: 3%;
+}
+
+.p-center {
+	text-align: center;
+} 
+
+.f20 {
+	font-size: 20px;
+}
+
+.f16 {
+	font-size: 16px;
+}
+
+p{
+	color: #00001a;
+}
+
+.alink{
+	color: #8c1aff;
+}

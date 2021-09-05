@@ -18,22 +18,23 @@ func start(port string) error {
 
 func createApp() *fiber.App {
 	engine := html.New("./views", ".html")
+
 	app := fiber.New(fiber.Config{
 		Views: engine,
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			code := fiber.StatusInternalServerError
 
-			// Retrieve the custom status code if it's a fiber.*Error
+			// retrieve the custom status code if it's a fiber.*Error
 			if e, ok := err.(*fiber.Error); ok {
 				code = e.Code
 			}
 			err = ctx.Status(code).SendFile(fmt.Sprintf("./views/%d.html", code))
 			if err != nil {
-				// In case the SendFile fails
+				// in case the SendFile fails
 				return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
 			}
 
-			// Return from handler
+			// return from handler
 			return nil
 		},
 	})
@@ -52,10 +53,12 @@ func createApp() *fiber.App {
 	}
 
 	// routes
+	app.Static("/", "./views")
 	app.Add(http.MethodGet, "/health", HealthCheckHandler)
 	app.Add(http.MethodPost, "/challenges", challengeSvc.CreateChallengeHandler)
 	app.Add(http.MethodGet, "/challenges", challengeSvc.GetChallengesHandler)
 	app.Add(http.MethodGet, "/once", challengeSvc.GetChallengeByIdHandler)
+	app.Add(http.MethodGet, "/", challengeSvc.AddChallengeFormHandler)
 
 	return app
 }

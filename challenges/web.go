@@ -30,6 +30,7 @@ func (c *ChallengeService) CreateChallengeHandler(ctx *fiber.Ctx) error {
 		return err
 	}
 
+
 	return ctx.JSON(&challenge)
 }
 
@@ -80,4 +81,8 @@ func (c *ChallengeService) GetChallengeByIdHandler(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Render("challenges", res)
+}
+
+func (c *ChallengeService) AddChallengeFormHandler(ctx *fiber.Ctx) error {
+	return ctx.Render("index", nil)
 }
