@@ -10,6 +10,7 @@ type ChallengeGateway struct {
 }
 
 func (g *ChallengeGateway) CreateChallenge(c Challenge) (Challenge, error) {
+	c.Active = true
 	err := g.Create(&c).Error
 	return c, err
 }
@@ -25,7 +26,8 @@ func (g *ChallengeGateway) GetChallenges(level Level, challengeType ChallengeTyp
 		challengeType = defaultValue
 	}
 
-	err := g.Find(&result, "level = ? and challenge_type = ?", level, challengeType).Error
+	err := g.Find(&result, "level = ? and challenge_type = ? and active = ?", level, challengeType, true).Error
+
 	return result, err
 }
 

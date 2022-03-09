@@ -39,8 +39,7 @@ func createApp() *fiber.App {
 		},
 	})
 	// middlewares
-	app.Use(recover.New())
-	app.Use(compress.New(compress.Config{
+	app.Use(recover.New(), compress.New(compress.Config{
 		Level: compress.LevelBestSpeed,
 	}))
 
