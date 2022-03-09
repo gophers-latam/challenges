@@ -27,7 +27,7 @@ func printHelpMessage(s *discordgo.Session, m *discordgo.MessageCreate, strs []s
 	** .go challenge {nivel} {tipo_de_chellenge} **
 	
 	Los niveles disponibles son: easy, medium, hard
-	Los tipos disponibles son: algorithm, concurrency, database, web, cli, core, frontend
+	Los tipos disponibles son: backend, algorithm, concurrency, database, web, cli, core, frontend
 
 	Podes subir el texto del challenge aca: https://challenbot.herokuapp.com`)
 	}
