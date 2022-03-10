@@ -5,7 +5,8 @@ import "gorm.io/gorm"
 type Level string
 type ChallengeType string
 
-const defaultValue = "default"
+const defaultLevel = "easy"
+const defaultType = "backend"
 
 var (
 	Levels = map[Level]struct{}{
@@ -32,11 +33,11 @@ type Challenge struct {
 }
 
 func (c *Challenge) validate() {
-	if c.Level == "" {
-		c.Level = defaultValue
+	if _, ok := Levels[c.Level]; !ok {
+		c.Level = defaultLevel
 	}
 
-	if c.ChallengeType == "" {
-		c.ChallengeType = defaultValue
+	if _, ok := ChallengeTypes[c.ChallengeType]; !ok {
+		c.ChallengeType = defaultType
 	}
 }
