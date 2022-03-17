@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"os"
+	"time"
 )
 
 var DB *gorm.DB
@@ -30,6 +31,11 @@ func getClearDB() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+
+	dbConfig, _ := db.DB()
+	dbConfig.SetMaxIdleConns(0)
+	dbConfig.SetMaxIdleConns(10)
+	dbConfig.SetConnMaxIdleTime(1 * time.Hour)
 
 	return db
 }
