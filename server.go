@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
-	"github.com/tomiok/challenge-svc/challenges"
-	"github.com/tomiok/challenge-svc/storage"
-	"net/http"
+	"github.com/gophers-latam/challenges/challenges"
+	"github.com/gophers-latam/challenges/storage"
 )
 
 func start(port string) error {

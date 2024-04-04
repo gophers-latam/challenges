@@ -2,16 +2,16 @@ package messages
 
 import (
 	"errors"
-	"github.com/tomiok/challenge-svc/challenges"
-	"github.com/tomiok/challenge-svc/storage"
 	"math/rand"
+
+	"github.com/gophers-latam/challenges/challenges"
+	"github.com/gophers-latam/challenges/storage"
 )
 
 func GetChallenge(level, topic string) (*challenges.Challenge, error) {
 	var res []challenges.Challenge
 
 	err := storage.Get().Find(&res, "level=? and challenge_type=?", level, topic).Error
-
 	if err != nil {
 		return nil, err
 	}
