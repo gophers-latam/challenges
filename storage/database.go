@@ -1,11 +1,14 @@
 package storage
 
 import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/gophers-latam/challenges/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"os"
-	"time"
 )
 
 var DB *gorm.DB
@@ -17,32 +20,33 @@ func Get() *gorm.DB {
 	return DB
 }
 
+// switch between local sqlite and mysql remote
 func get() *gorm.DB {
-	if env := os.Getenv("ENV"); env == "" || env == "local" {
-		return getSqlite()
+	if env := os.Getenv("DBHOST"); env == "" {
+		return getLocalDB()
 	}
-	return getClearDB()
+	return getRemoteDB()
 }
 
-func getClearDB() *gorm.DB {
-	dsn := os.Getenv("CLEARDB_DATABASE_URL")
+func getRemoteDB() *gorm.DB {
+	c := global.GetConfig()
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		c.DbUser, c.DbPass, c.DbHost, c.DbName,
+	)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
 	if err != nil {
 		panic(err)
 	}
 
 	dbConfig, _ := db.DB()
-	dbConfig.SetMaxIdleConns(0)
-	dbConfig.SetMaxIdleConns(10)
 	dbConfig.SetConnMaxIdleTime(1 * time.Hour)
 
 	return db
 }
 
-func getSqlite() *gorm.DB {
+func getLocalDB() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("gophers.db"), &gorm.Config{})
-
 	if err != nil {
 		panic(err)
 	}

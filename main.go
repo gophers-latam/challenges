@@ -2,38 +2,56 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	messages "github.com/gophers-latam/challenges/discordbot"
+	msg "github.com/gophers-latam/challenges/bot"
 	"github.com/gophers-latam/challenges/global"
-	"github.com/gophers-latam/challenges/logs"
+	chg "github.com/gophers-latam/challenges/http"
 	"github.com/gophers-latam/challenges/storage"
 	"go.uber.org/zap"
 )
 
 func main() {
-	logs.InitLogs()
+	global.InitLogs()
 
-	dg, err := discordgo.New("Bot " + global.Token)
+	config := global.GetConfig()
+	dg, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
 		log.Fatal("session error:", err.Error())
 	}
-	// dg.Debug = true
 
-	// Register bot handlers.
-	dg.AddHandler(messages.MessageCmd)
-	dg.AddHandler(messages.SetStatus)
+	// bot handlers
+	dg.AddHandler(msg.Stat)
+	dg.AddHandler(msg.SubCmd)
+	dg.AddHandler(msg.SlhCmd)
+	dg.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
-	err = dg.Open()
-	if err != nil {
-		log.Fatal("websocket error,", err.Error())
+	if err = dg.Open(); err != nil {
+		log.Fatal("bot error:", err.Error())
 	}
 
+	cmd := msg.InitSlhCmd(dg)
+
+	defer dg.Close()
+	defer msg.RemoveSlhCmd(dg, cmd) // to recreate all
+
+	// web handlers
 	storage.Migrate()
-	port := global.Port
-	if port == "" {
-		port = "5000"
-	}
+	wa := chg.WebApp{DB: storage.Get(), Port: config.Port}
+	go func() {
+		zap.L().Fatal("web error:",
+			zap.Error(wa.App().Listen(":"+wa.Port)),
+		)
+	}()
 
-	zap.L().Fatal("cannot init server", zap.Error(start(port)))
+	// wait for exit signal to make defer funcs
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	<-quit
+	if err := wa.App().Shutdown(); err != nil {
+		log.Fatal("forced to shutdown:", err)
+	}
 }

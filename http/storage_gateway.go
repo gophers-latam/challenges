@@ -1,4 +1,4 @@
-package challenges
+package http
 
 import (
 	"go.uber.org/zap"
@@ -11,7 +11,7 @@ type ChallengeGateway struct {
 
 func (g *ChallengeGateway) CreateChallenge(c Challenge) (Challenge, error) {
 	c.validate()
-	c.Active = true
+	c.Active = 0 // to aprove
 	err := g.Create(&c).Error
 	return c, err
 }
@@ -27,15 +27,14 @@ func (g *ChallengeGateway) GetChallenges(level Level, challengeType ChallengeTyp
 		challengeType = defaultType
 	}
 
-	err := g.Find(&result, "level = ? and challenge_type = ? and active = ?", level, challengeType, true).Error
+	err := g.Find(&result, "level = ? and challenge_type = ? and active = ?", level, challengeType, 1).Error
 
 	return result, err
 }
 
 func (g *ChallengeGateway) GetChallengeById(id int) (*Challenge, error) {
 	var result *Challenge
-	err := g.Model(Challenge{}).Find(&result, "id=?", id).Error
-
+	err := g.Model(Challenge{}).Find(&result, "id = ?", id).Error
 	if err != nil {
 		zap.L().Error("cannot get challenge", zap.Error(err))
 		return nil, err

@@ -1,14 +1,14 @@
 package storage
 
 import (
-	"github.com/gophers-latam/challenges/challenges"
+	chg "github.com/gophers-latam/challenges/http"
 	"go.uber.org/zap"
 )
 
 func Migrate() {
 	db := Get()
 
-	err := db.AutoMigrate(challenges.Challenge{})
+	err := db.AutoMigrate(chg.Command{}, chg.Challenge{})
 	if err != nil {
 		zap.S().Fatal("cannot do migration, %s", err.Error())
 	}
