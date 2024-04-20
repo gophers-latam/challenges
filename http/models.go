@@ -20,11 +20,13 @@ var (
 	}
 
 	ChallengeTypes = map[ChallengeType]struct{}{
-		"backend":    {},
-		"frontend":   {},
-		"algorithms": {},
-		"services":   {},
-		"design":     {},
+		"backend":     {},
+		"algorithm":   {},
+		"concurrency": {},
+		"database":    {},
+		"web":         {},
+		"cli":         {},
+		"frontend":    {},
 	}
 )
 
@@ -38,7 +40,7 @@ type Challenge struct {
 	gorm.Model
 	Description   string        `json:"description" gorm:"column:description;size:15000"`
 	Level         Level         `json:"level" gorm:"column:level"`
-	ChallengeType ChallengeType `json:"challenge_type" gorm:"column:challenge_type"`
+	ChallengeType ChallengeType `json:"challengeType" gorm:"column:challenge_type"`
 	Active        int           `json:"active" gorm:"column:active"`
 }
 

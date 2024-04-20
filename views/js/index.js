@@ -1,8 +1,5 @@
 // simple ajax post
 $(document).ready(function () {
-    Notification.requestPermission().then((res) => {
-        console.log(res);
-    });
     let path = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
     $("form").submit(function (e) {
         let description = $("#description").val();
@@ -23,10 +20,12 @@ $(document).ready(function () {
                 encode: true,
             }).done(function (res) {
                 console.log(res);
-                new Notification("Desafio recibido y guardado correctamente 😎");
+                // new Notificacion() needs permission, by default are disabled
+                // instead use alert dialog
+                alert("Desafio registrado para aprobar 👀");
             });
         } else {
-            alert("No se estan mandando valores válidos")
+            alert("No se estan mandando valores válidos");
         }
 
         e.preventDefault();
