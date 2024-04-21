@@ -74,9 +74,9 @@ func msgChallenges(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		message := `[*Challenge*] 
-			-**Level:** ` + string(msg.Level) + ` -**Type:** ` + string(msg.ChallengeType) + `
-			-**Description: ** ` + msg.Description
+		message := `[*challenge*]⤵️
+		-**Level:** ` + string(msg.Level) + ` -**Type:** ` + string(msg.ChallengeType) + `
+		-**Description: ** ` + msg.Description
 
 		_, _ = s.ChannelMessageSend(m.ChannelID, message)
 		return

@@ -90,7 +90,7 @@ var (
 			}
 
 			msg, _ := GetChallenge(margs[0].(string), margs[1].(string))
-			text := `[*Challenge*] 
+			text := `[*challenge*]⤵️
 			-**Level:** ` + string(msg.Level) + ` -**Type:** ` + string(msg.ChallengeType) + `
 			-**Description: ** ` + msg.Description
 
