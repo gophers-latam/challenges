@@ -21,7 +21,7 @@ func unsuccessfulMsg(s *discordgo.Session, m *discordgo.MessageCreate, t string)
 	_, _ = s.ChannelMessageSend(m.ChannelID, t)
 }
 
-func mgsEmbed(s *discordgo.Session, m *discordgo.MessageCreate, t, d string) {
+func msgEmbed(s *discordgo.Session, m *discordgo.MessageCreate, t, d string) {
 	embed := &discordgo.MessageEmbed{
 		Title:       t,
 		URL:         "https://discord.gg/AEarh2kSvn",
