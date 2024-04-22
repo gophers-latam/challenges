@@ -97,7 +97,7 @@ func msgCommands(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if cmd == global.Prefix+" help" {
-		mgsEmbed(s, m, cmd, msg.Text)
+		msgEmbed(s, m, cmd, msg.Text)
 	} else {
 		_, _ = s.ChannelMessageSend(m.ChannelID, msg.Text)
 	}

@@ -29,13 +29,13 @@ var (
 				{
 					Type:        discordgo.ApplicationCommandOptionString,
 					Name:        "level",
-					Description: "chanllenge {level}",
+					Description: "challenge {level}",
 					Required:    true,
 				},
 				{
 					Type:        discordgo.ApplicationCommandOptionString,
 					Name:        "type",
-					Description: "chanllenge {type}",
+					Description: "challenge {type}",
 					Required:    true,
 				},
 			},
