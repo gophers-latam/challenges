@@ -21,6 +21,6 @@
 
 ### TODO:
 
-[ ] Improve readme
+[] Improve readme
 
-[ ] Add new ideas for commands use: go faq redirects, etc.
+[] Add new ideas for commands use: go faq, go redirects, go facts, etc.

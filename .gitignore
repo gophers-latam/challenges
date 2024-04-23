@@ -1,2 +1,5 @@
 .idea
 .env
+
+# whe use live-reload Air bin
+/tmp
