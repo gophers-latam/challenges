@@ -19,7 +19,7 @@ func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	for _, word := range words {
 		if word == "bot" {
-			_, _ = s.ChannelMessageSend(m.ChannelID, `envia: .go (para usar el gopherbottttt)`)
+			_, _ = s.ChannelMessageSend(m.ChannelID, `envia: .go (para usar el gopherbot)`)
 			return
 		}
 	}
