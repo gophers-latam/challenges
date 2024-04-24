@@ -15,9 +15,13 @@ func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// bot word mention
-	if strings.Contains(m.Content, "bot") {
-		_, _ = s.ChannelMessageSend(m.ChannelID, `envia: .go (para usar el gopherbot)`)
-		return
+	words := strings.Fields(m.Content)
+
+	for _, word := range words {
+		if word == "bot" {
+			_, _ = s.ChannelMessageSend(m.ChannelID, `envia: .go (para usar el gopherbottttt)`)
+			return
+		}
 	}
 
 	// stop if not use subcommand prefix
