@@ -3,6 +3,7 @@ package bot
 import (
 	"database/sql"
 	"strings"
+	"regexp"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/gophers-latam/challenges/global"
@@ -15,13 +16,9 @@ func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// bot word mention
-	words := strings.Fields(m.Content)
-
-	for _, word := range words {
-		if word == "bot" {
-			_, _ = s.ChannelMessageSend(m.ChannelID, `envia: .go (para usar el gopherbot)`)
-			return
-		}
+	if matched, err := regexp.MatchString("\\bbot\\b", m.Content); err == nil && matched {
+		_, _ = s.ChannelMessageSend(m.ChannelID, `envia: .go (para usar el gopherbot)`)
+		return
 	}
 
 	// stop if not use subcommand prefix
