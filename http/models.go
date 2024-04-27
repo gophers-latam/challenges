@@ -36,6 +36,11 @@ type Command struct {
 	Text string `json:"text" gorm:"column:text;size:10000"`
 }
 
+type Fact struct {
+	gorm.Model
+	Text string `json:"text" gorm:"column:text;size:10000"`
+}
+
 type Challenge struct {
 	gorm.Model
 	Description   string        `json:"description" gorm:"column:description;size:15000"`
@@ -52,4 +57,11 @@ func (c *Challenge) validate() {
 	if _, ok := ChallengeTypes[c.ChallengeType]; !ok {
 		c.ChallengeType = defaultType
 	}
+}
+
+func (c Challenge) ChallengeFmt() string {
+	m := `[*challenge*]⤵️
+		-**Level:** ` + string(c.Level) + ` -**Type:** ` + string(c.ChallengeType) + `
+		-**Description: ** ` + c.Description
+	return m
 }

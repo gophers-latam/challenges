@@ -40,6 +40,10 @@ var (
 				},
 			},
 		},
+		{
+			Name:        "facts",
+			Description: "Show .go facts",
+		},
 	}
 
 	commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
@@ -47,7 +51,7 @@ var (
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
-					Content: `Hola **` + i.Member.User.Username + `** - envia: .go (para usar el gopherbot)`,
+					Content: `Hola **` + i.Member.User.Username + `** ` + defaultMsg,
 				},
 			})
 		},
@@ -90,14 +94,20 @@ var (
 			}
 
 			msg, _ := GetChallenge(margs[0].(string), margs[1].(string))
-			text := `[*challenge*]⤵️
-			-**Level:** ` + string(msg.Level) + ` -**Type:** ` + string(msg.ChallengeType) + `
-			-**Description: ** ` + msg.Description
 
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
-					Content: text,
+					Content: msg.ChallengeFmt(),
+				},
+			})
+		},
+		"facts": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			msg, _ := GetFact()
+			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Content: msg.Text,
 				},
 			})
 		},

@@ -27,6 +27,25 @@ func GetChallenge(level, topic string) (*chg.Challenge, error) {
 	return &res[i], err
 }
 
+func GetFact() (*chg.Fact, error) {
+	var res []chg.Fact
+
+	err := storage.Get().Find(&res).Error
+	if err != nil {
+		return nil, err
+	}
+
+	l := len(res)
+
+	if l == 0 {
+		return nil, errors.New("no results found")
+	}
+
+	i := rand.Intn(l)
+
+	return &res[i], err
+}
+
 func GetCommand(cmd string) (*chg.Command, error) {
 	var res []chg.Command
 
