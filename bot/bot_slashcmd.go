@@ -1,6 +1,9 @@
 package bot
 
 import (
+	"database/sql"
+	"errors"
+	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -43,6 +46,28 @@ var (
 		{
 			Name:        "facts",
 			Description: "Show .go facts",
+		},
+		{
+			Name:        "events",
+			Description: "Show .go events",
+		},
+		{
+			Name:        "hours",
+			Description: "Get hours LATAM",
+			Options: []*discordgo.ApplicationCommandOption{
+				{
+					Type:        discordgo.ApplicationCommandOptionString,
+					Name:        "hour",
+					Description: "format {HH:MM}",
+					Required:    true,
+				},
+				{
+					Type:        discordgo.ApplicationCommandOptionString,
+					Name:        "country",
+					Description: "country {name}",
+					Required:    true,
+				},
+			},
 		},
 	}
 
@@ -93,7 +118,13 @@ var (
 				margs = append(margs, option.StringValue())
 			}
 
-			msg, _ := GetChallenge(margs[0].(string), margs[1].(string))
+			msg, err := GetChallenge(margs[0].(string), margs[1].(string))
+			if err != nil {
+				if errors.Is(err, sql.ErrNoRows) {
+					unsuccessfulInteraction(s, i, `**Ups, sin desafios que coincidan**`)
+				}
+				return
+			}
 
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -103,11 +134,67 @@ var (
 			})
 		},
 		"facts": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			msg, _ := GetFact()
+			msg, err := GetFact()
+			if err != nil {
+				if errors.Is(err, sql.ErrNoRows) {
+					unsuccessfulInteraction(s, i, `**Ups, sin hechos que mencionar**`)
+				}
+				return
+			}
+
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
 					Content: msg.Text,
+				},
+			})
+		},
+		"events": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			msg, err := GetEvents()
+			if err != nil {
+				if errors.Is(err, sql.ErrNoRows) {
+					unsuccessfulInteraction(s, i, `**Ups, sin eventos para mostrar**`)
+				}
+				return
+			}
+
+			for _, e := range *msg {
+				s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+					Type: discordgo.InteractionResponseChannelMessageWithSource,
+					Data: &discordgo.InteractionResponseData{
+						Content: e.Text,
+					},
+				})
+			}
+		},
+		"hours": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			options := i.ApplicationCommandData().Options
+			optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(options))
+			for _, opt := range options {
+				optionMap[opt.Name] = opt
+			}
+
+			margs := make([]interface{}, 0, len(options))
+
+			if option, ok := optionMap["hour"]; ok {
+				margs = append(margs, option.StringValue())
+			}
+
+			if option, ok := optionMap["country"]; ok {
+				margs = append(margs, option.StringValue())
+			}
+
+			msg := GetHours(margs[0].(string), margs[1].(string))
+			fmt.Println(msg)
+			if msg == "" {
+				unsuccessfulInteraction(s, i, `**Ups, no se puede mostrar equivalencia horaria**`)
+				return
+			}
+
+			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Content: msg,
 				},
 			})
 		},

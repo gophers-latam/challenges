@@ -30,6 +30,16 @@ var (
 	}
 )
 
+var TimeZones = map[string]string{
+	"Argentina": "America/Argentina/Buenos_Aires",
+	"Brasil":    "America/Sao_Paulo",
+	"Chile":     "America/Santiago",
+	"Colombia":  "America/Bogota",
+	"Mexico":    "America/Mexico_City",
+	"Peru":      "America/Lima",
+	"Venezuela": "America/Caracas",
+}
+
 type Command struct {
 	gorm.Model
 	Cmd  string `json:"cmd" gorm:"column:cmd;size:500"`
@@ -39,6 +49,11 @@ type Command struct {
 type Fact struct {
 	gorm.Model
 	Text string `json:"text" gorm:"column:text;size:10000"`
+}
+
+type Event struct {
+	gorm.Model
+	Text string `json:"text" gorm:"column:text;size:5000"`
 }
 
 type Challenge struct {

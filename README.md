@@ -14,7 +14,7 @@
 
 ### Adoption & testing:
 
-- https://discord.me/gophers-latam
+- https://dsc.gg/gophers-latam
 
 - discord channel:  [🤖gopher-bot](https://discord.com/channels/764989185077542942/1224514137548132394)
 
