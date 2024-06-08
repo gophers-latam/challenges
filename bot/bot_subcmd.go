@@ -2,7 +2,7 @@ package bot
 
 import (
 	"database/sql"
-	"regexp"
+	"errors"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -12,12 +12,6 @@ import (
 func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// ignore msg by itself
 	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
-	// bot word mention
-	if matched, err := regexp.MatchString("\\bbot\\b", m.Content); err == nil && matched {
-		_, _ = s.ChannelMessageSend(m.ChannelID, defaultMsg)
 		return
 	}
 
@@ -33,11 +27,17 @@ func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if args[1] == "facts" { // go to facts subcommands
+	switch {
+	case args[1] == "facts":
 		msgFacts(s, m)
-	} else if args[1] == "challenge" { // go to challenges subcommands
+	case args[1] == "events":
+		msgEvents(s, m)
+	case args[1] == "hours":
+		msgHours(s, m)
+	case args[1] == "challenge":
 		msgChallenges(s, m)
-	} else { // more subcommands in database
+	default:
+		// more subcommands in database
 		msgCommands(s, m)
 	}
 }
@@ -50,10 +50,10 @@ func msgHello(s *discordgo.Session, m *discordgo.MessageCreate) {
 func msgFacts(s *discordgo.Session, m *discordgo.MessageCreate) {
 	msg, err := GetFact()
 	if err != nil {
-		if err != sql.ErrNoRows {
-			unsuccessfulMsg(s, m, `**Ups, algo anda mal**`)
-			return
+		if errors.Is(err, sql.ErrNoRows) {
+			unsuccessfulMsg(s, m, `**Ups, sin hechos que mencionar**`)
 		}
+		return
 	}
 
 	embed := &discordgo.MessageEmbed{
@@ -65,6 +65,45 @@ func msgFacts(s *discordgo.Session, m *discordgo.MessageCreate) {
 	msgEmbed(s, m, embed)
 
 	return
+}
+
+func msgEvents(s *discordgo.Session, m *discordgo.MessageCreate) {
+	msg, err := GetEvents()
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			unsuccessfulMsg(s, m, `**Ups, sin eventos para mostrar**`)
+		}
+		return
+	}
+
+	for _, e := range *msg {
+		_, _ = s.ChannelMessageSend(m.ChannelID, e.Text)
+	}
+
+	return
+}
+
+func msgHours(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cmd := m.Content
+
+	values := strings.Split(cmd, " ")
+	l := len(values)
+
+	if l == 4 {
+		hour := values[2]
+		country := values[3]
+
+		msg := GetHours(hour, country)
+		if msg == "" {
+			unsuccessfulMsg(s, m, `**Ups, no se puede mostrar equivalencia horaria**`)
+			return
+		}
+
+		_, _ = s.ChannelMessageSend(m.ChannelID, msg)
+		return
+	}
+
+	unsuccessfulMsg(s, m, `Error en subcomando, ver ayuda con: **.go help**`)
 }
 
 func msgChallenges(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -84,14 +123,14 @@ func msgChallenges(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		msg, err := GetChallenge(level, topic)
 		if err != nil {
-			if err != sql.ErrNoRows {
+			if errors.Is(err, sql.ErrNoRows) {
 				unsuccessfulMsg(s, m, `**Ups, sin desafios que coincidan**`)
-				return
 			}
+			return
 		}
 
 		if msg.Description == "" {
-			_, _ = s.ChannelMessageSend(m.ChannelID, "no challenge with **Description** found")
+			_, _ = s.ChannelMessageSend(m.ChannelID, "Ups, desafío sin **Descripción**")
 			return
 		}
 
@@ -107,10 +146,10 @@ func msgCommands(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	msg, err := GetCommand(cmd)
 	if err != nil {
-		if err != sql.ErrNoRows {
-			unsuccessfulMsg(s, m, `**Ups, intenta de nuevo, sin espacios extras**`)
-			return
+		if errors.Is(err, sql.ErrNoRows) {
+			unsuccessfulMsg(s, m, `**Ups, intenta de nuevo sin espacios extras**`)
 		}
+		return
 	}
 
 	if cmd == global.Prefix+" help" {

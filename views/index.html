@@ -17,7 +17,7 @@
   <div class="container col-sm-6 col-sm-offset-3">
     <div style="text-align: center;">
       <h4>Envía challenge al Gopherbot</h4> en 
-      <a class="alink" href="https://discord.gg/AEarh2kSvn" target="_blank"><b>Gophers LATAM</b></a>
+      <a class="alink" href="https://dsc.gg/gophers-latam" target="_blank"><b>Gophers LATAM</b></a>
       <img src="./img/gophers-latam.png" height="48" alt="Gophers LATAM">
     </div>
 
@@ -31,9 +31,9 @@
         <label for="level">Nivel de dificultad:</label>
         <select class="form-select" id="level" required>
           <option value="">- Seleccionar -</option>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
+          <option value="easy">easy</option>
+          <option value="medium">medium</option>
+          <option value="hard">hard</option>
         </select>
       </div>
 
@@ -41,13 +41,13 @@
         <label for="challengetype">Tipo relacionado de desafío:</label>
         <select class="form-select" id="challengetype" required>
           <option value="">- Seleccionar -</option>
-          <option value="backend">Backend</option>
-          <option value="algorithm">Algorithm</option>
-          <option value="concurrency">Concurrency</option>
-          <option value="database">Database</option>
-          <option value="web">Web</option>
-          <option value="cli">CLI</option>
-          <option value="frontend">Frontend</option>
+          <option value="web">web</option>
+          <option value="cli">cli</option>
+          <option value="backend">backend</option>
+          <option value="algorithm">algorithm</option>
+          <option value="concurrency">concurrency</option>
+          <option value="database">database</option>
+          <option value="frontend">frontend</option>
         </select>
       </div>
       <br>
@@ -61,13 +61,13 @@
       <p class="p-center"><b>Comandos</b></p>
       <b>sub-cmd: </b>
       <ul>
-        <li><b>bot</b> - llamar al bot</li>
         <li><b>.go</b> - saludo del bot</li>
         <li><b>.go help</b> - ver sub-comandos generales disponibles</li>
         <li><b>.go awesome</b> - recursos comunidad</li>
-        <li><b>.go challenge</b> - pedir desafio para practicar</li>
+        <li><b>.go challenge</b> {level} {type} - pedir desafio para practicar. Ver ayuda con <b>.go challenge help</b></li>
         <li><b>.go facts</b> - chistes internos de la comunidad, ejecutalo y te sorprenderas</li>
-        <li>...</li>
+        <li><b>.go events</b> - listar eventos establecidos como recurrentes</li>
+        <li><b>.go hour</b> {"HH:MM" 24h} {country} - en formato 24h, listar equivalencia horaria de los paises en LATAM</li>
       </ul>
       <br>
       <b>slash-cmd: </b>
@@ -77,7 +77,8 @@
         <li><b>/challenge</b> - pedir desafio para practicar</li>
         <li><b>/challenge_help</b> - ver ayuda sub-comando .go challenge</li>
         <li><b>/facts</b> - chistes internos de la comunidad, ejecutalo y te sorprenderas</li>
-        <li>...</li>
+        <li><b>/events</b> - listar eventos establecidos como recurrentes</li>
+        <li><b>/hour</b> - listar equivalencia horaria de los paises en LATAM</li>
         </li>
       </ul>
       <div align="center">

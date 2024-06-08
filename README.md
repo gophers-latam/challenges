@@ -8,19 +8,26 @@
 
 ### Command types:
 
-- subcommands
+- Subcommands
 
-- slash commands
+- Slash commands
+
+![avatar](https://raw.githubusercontent.com/gophers-latam/challenges/master/views/img/gophers-latam.png)
 
 ### Adoption & testing:
 
-- https://discord.me/gophers-latam
+- Server: https://dsc.gg/gophers-latam
 
-- discord channel:  [🤖gopher-bot](https://discord.com/channels/764989185077542942/1224514137548132394)
+- Discord channel:  [🤖gopher-bot](https://discord.com/channels/764989185077542942/1224514137548132394)
 
+- Form to add challenges: https://gopherbot.onrender.com
 
 ### TODO:
 
 [] Improve readme
 
-[] Add new ideas for commands use: go faq, go redirects, go facts, etc.
+[] Add idea for `.go faq` command
+
+[] Add idea for `.go redirects` command
+
+[] Resolve [issues](https://github.com/gophers-latam/challenges/issues)
