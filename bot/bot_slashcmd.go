@@ -3,7 +3,6 @@ package bot
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -58,7 +57,7 @@ var (
 				{
 					Type:        discordgo.ApplicationCommandOptionString,
 					Name:        "hour",
-					Description: "format {HH:MM}",
+					Description: "24h format {HH:MM}",
 					Required:    true,
 				},
 				{
@@ -185,7 +184,6 @@ var (
 			}
 
 			msg := GetHours(margs[0].(string), margs[1].(string))
-			fmt.Println(msg)
 			if msg == "" {
 				unsuccessfulInteraction(s, i, `**Ups, no se puede mostrar equivalencia horaria**`)
 				return

@@ -2,6 +2,7 @@ package bot
 
 import (
 	"log"
+	"unicode"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -38,4 +39,14 @@ func msgEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.Mes
 	}
 	e.Color = 0x78141b
 	s.ChannelMessageSendEmbed(m.ChannelID, e)
+}
+
+func wordCase(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+
+	runes := []rune(s)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
 }

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"math/rand"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -87,7 +88,8 @@ func GetHours(hour, country string) string {
 	h, _ := strconv.Atoi(args[0])
 	m, _ := strconv.Atoi(args[1])
 
-	loc, err := time.LoadLocation(chg.TimeZones[country])
+	countryCase := wordCase(country)
+	loc, err := time.LoadLocation(chg.TimeZones[countryCase])
 	if err != nil {
 		return ""
 	}
@@ -96,17 +98,23 @@ func GetHours(hour, country string) string {
 	inTime := time.Date(now.Year(), now.Month(), now.Day(), h, m, 0, 0, loc)
 	originTime := inTime.In(loc)
 
-	b.WriteString(fmt.Sprintf("🕒 **%s**: `%s` hrs\n", country, inTime.Format("15:04")))
-	for c, tz := range chg.TimeZones {
-		if c == country {
+	tzones := make([]string, 0, len(chg.TimeZones))
+	for key := range chg.TimeZones {
+		tzones = append(tzones, key)
+	}
+	sort.Strings(tzones)
+
+	b.WriteString(fmt.Sprintf("🕒 **%s**: `%s` hrs\n", countryCase, inTime.Format("15:04")))
+	for _, tz := range tzones {
+		if tz == countryCase {
 			continue
 		}
-		loc, err := time.LoadLocation(tz)
+		loc, err := time.LoadLocation(chg.TimeZones[tz])
 		if err != nil {
 			continue
 		}
 		lTime := originTime.In(loc)
-		b.WriteString(fmt.Sprintf("🕒 **%s**: `%s` hrs\n", c, lTime.Format("15:04")))
+		b.WriteString(fmt.Sprintf("🕒 **%s**: `%s` hrs\n", tz, lTime.Format("15:04")))
 	}
 
 	return b.String()
