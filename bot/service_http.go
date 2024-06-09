@@ -89,7 +89,7 @@ func GetHours(hour, country string) string {
 	m, _ := strconv.Atoi(args[1])
 
 	countryCase := wordCase(country)
-	loc, err := time.LoadLocation(chg.TimeZones[countryCase])
+	loc, err := time.LoadLocation(chg.TimeZones[countryCase].Timezone)
 	if err != nil {
 		return ""
 	}
@@ -104,17 +104,17 @@ func GetHours(hour, country string) string {
 	}
 	sort.Strings(tzones)
 
-	b.WriteString(fmt.Sprintf("🕒 **%s**: `%s` hrs\n", countryCase, inTime.Format("15:04")))
+	b.WriteString(fmt.Sprintf("🕒 %s **%s**: `%s` hrs\n", chg.TimeZones[countryCase].Flag, countryCase, inTime.Format("15:04")))
 	for _, tz := range tzones {
 		if tz == countryCase {
 			continue
 		}
-		loc, err := time.LoadLocation(chg.TimeZones[tz])
+		loc, err := time.LoadLocation(chg.TimeZones[tz].Timezone)
 		if err != nil {
 			continue
 		}
 		lTime := originTime.In(loc)
-		b.WriteString(fmt.Sprintf("🕒 **%s**: `%s` hrs\n", tz, lTime.Format("15:04")))
+		b.WriteString(fmt.Sprintf("🕒 %s **%s**: `%s` hrs\n", chg.TimeZones[tz].Flag, tz, lTime.Format("15:04")))
 	}
 
 	return b.String()

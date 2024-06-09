@@ -30,27 +30,32 @@ var (
 	}
 )
 
-var TimeZones = map[string]string{
-	"Argentina":            "America/Argentina/Buenos_Aires",
-	"Bolivia":              "America/La_Paz",
-	"Brasil":               "America/Sao_Paulo",
-	"Chile":                "America/Santiago",
-	"Colombia":             "America/Bogota",
-	"Costa_Rica":           "America/Costa_Rica",
-	"Cuba":                 "America/Havana",
-	"El_Salvador":          "America/El_Salvador",
-	"Ecuador":              "America/Guayaquil",
-	"Guatemala":            "America/Guatemala",
-	"Honduras":             "America/Tegucigalpa",
-	"Mexico":               "America/Mexico_City",
-	"Nicaragua":            "America/Managua",
-	"Panama":               "America/Panama",
-	"Paraguay":             "America/Asuncion",
-	"Peru":                 "America/Lima",
-	"Puerto_Rico":          "America/Puerto_Rico",
-	"Republica_Dominicana": "America/Santo_Domingo",
-	"Uruguay":              "America/Montevideo",
-	"Venezuela":            "America/Caracas",
+type CountryData struct {
+	Timezone string
+	Flag     string
+}
+
+var TimeZones = map[string]CountryData{
+	"Argentina":            {Timezone: "America/Argentina/Buenos_Aires", Flag: "🇦🇷"},
+	"Bolivia":              {Timezone: "America/La_Paz", Flag: "🇧🇴"},
+	"Brasil":               {Timezone: "America/Sao_Paulo", Flag: "🇧🇷"},
+	"Chile":                {Timezone: "America/Santiago", Flag: "🇨🇱"},
+	"Colombia":             {Timezone: "America/Bogota", Flag: "🇨🇴"},
+	"Costa_Rica":           {Timezone: "America/Costa_Rica", Flag: "🇨🇷"},
+	"Cuba":                 {Timezone: "America/Havana", Flag: "🇨🇺"},
+	"El_Salvador":          {Timezone: "America/El_Salvador", Flag: "🇸🇻"},
+	"Ecuador":              {Timezone: "America/Guayaquil", Flag: "🇪🇨"},
+	"Guatemala":            {Timezone: "America/Guatemala", Flag: "🇬🇹"},
+	"Honduras":             {Timezone: "America/Tegucigalpa", Flag: "🇭🇳"},
+	"Mexico":               {Timezone: "America/Mexico_City", Flag: "🇲🇽"},
+	"Nicaragua":            {Timezone: "America/Managua", Flag: "🇳🇮"},
+	"Panama":               {Timezone: "America/Panama", Flag: "🇵🇦"},
+	"Paraguay":             {Timezone: "America/Asuncion", Flag: "🇵🇾"},
+	"Peru":                 {Timezone: "America/Lima", Flag: "🇵🇪"},
+	"Puerto_Rico":          {Timezone: "America/Puerto_Rico", Flag: "🇵🇷"},
+	"Republica_Dominicana": {Timezone: "America/Santo_Domingo", Flag: "🇩🇴"},
+	"Uruguay":              {Timezone: "America/Montevideo", Flag: "🇺🇾"},
+	"Venezuela":            {Timezone: "America/Caracas", Flag: "🇻🇪"},
 }
 
 type Command struct {
