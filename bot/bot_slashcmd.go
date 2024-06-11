@@ -3,6 +3,7 @@ package bot
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -100,24 +101,22 @@ var (
 		"challenge": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			// options in the order provided by the user.
 			options := i.ApplicationCommandData().Options
-
-			// convert the slice options into a map
 			optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(options))
 			for _, opt := range options {
 				optionMap[opt.Name] = opt
 			}
 
-			margs := make([]interface{}, 0, len(options))
+			var level, challengeType string
 
 			if option, ok := optionMap["level"]; ok {
-				margs = append(margs, option.StringValue())
+				level = option.StringValue()
 			}
 
 			if option, ok := optionMap["type"]; ok {
-				margs = append(margs, option.StringValue())
+				challengeType = option.StringValue()
 			}
 
-			msg, err := GetChallenge(margs[0].(string), margs[1].(string))
+			msg, err := GetChallenge(level, challengeType)
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {
 					unsuccessfulInteraction(s, i, `**Ups, sin desafios que coincidan**`)
@@ -173,19 +172,24 @@ var (
 				optionMap[opt.Name] = opt
 			}
 
-			margs := make([]interface{}, 0, len(options))
+			var hour, country string
 
 			if option, ok := optionMap["hour"]; ok {
-				margs = append(margs, option.StringValue())
+				hour = option.StringValue()
 			}
 
 			if option, ok := optionMap["country"]; ok {
-				margs = append(margs, option.StringValue())
+				country = option.StringValue()
 			}
 
-			msg := GetHours(margs[0].(string), margs[1].(string))
-			if msg == "" {
-				unsuccessfulInteraction(s, i, `**Ups, no se puede mostrar equivalencia horaria**`)
+			if hour == "" || country == "" {
+				unsuccessfulInteraction(s, i, `**Ups, opciones de comando faltantes**`)
+				return
+			}
+
+			msg, err := GetHours(hour, country)
+			if err != nil {
+				unsuccessfulInteraction(s, i, fmt.Sprintf("**Ups, no se puede mostrar equivalencia horaria: %s**", err))
 				return
 			}
 

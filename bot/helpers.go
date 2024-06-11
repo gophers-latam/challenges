@@ -2,7 +2,7 @@ package bot
 
 import (
 	"log"
-	"unicode"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -46,7 +46,5 @@ func wordCase(s string) string {
 		return s
 	}
 
-	runes := []rune(s)
-	runes[0] = unicode.ToUpper(runes[0])
-	return string(runes)
+	return strings.ToUpper(s[:1]) + s[1:]
 }

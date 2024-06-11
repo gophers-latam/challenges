@@ -3,6 +3,7 @@ package bot
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -10,34 +11,44 @@ import (
 )
 
 func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
-	// ignore msg by itself
+	// ignore msg by itself and split the message into arguments
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
-	// stop if not use subcommand prefix
-	args := strings.Split(m.Content, " ")
-	if args[0] != global.Prefix {
+	args := strings.Fields(m.Content)
+	if len(args) == 0 || args[0] != global.Prefix {
 		return
 	}
 
-	// go to hello subcommand
+	// go to hello subcommand if only prefix is present
 	if len(args) == 1 && args[0] == ".go" {
 		msgHello(s, m)
 		return
 	}
 
-	switch {
-	case args[1] == "facts":
+	/*
+			// OPTIONAL but NTH
+			// ensure there are at least two arguments to process subcommands
+		    if len(args) < 2 {
+		        // respond with a message indicating incomplete command
+		        s.ChannelMessageSend(m.ChannelID, "Incomplete command. Please provide a subcommand.")
+		        return
+		    }
+	*/
+
+	// process subcommands
+	switch args[1] {
+	case "facts":
 		msgFacts(s, m)
-	case args[1] == "events":
+	case "events":
 		msgEvents(s, m)
-	case args[1] == "hours":
+	case "hours":
 		msgHours(s, m)
-	case args[1] == "challenge":
+	case "challenge":
 		msgChallenges(s, m)
 	default:
-		// more subcommands in database
+		// handle more subcommands from the database
 		msgCommands(s, m)
 	}
 }
@@ -62,9 +73,8 @@ func msgFacts(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Name: "El Programador Pobre",
 		},
 	}
-	msgEmbed(s, m, embed)
 
-	return
+	msgEmbed(s, m, embed)
 }
 
 func msgEvents(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -79,52 +89,50 @@ func msgEvents(s *discordgo.Session, m *discordgo.MessageCreate) {
 	for _, e := range *msg {
 		_, _ = s.ChannelMessageSend(m.ChannelID, e.Text)
 	}
-
-	return
 }
 
 func msgHours(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cmd := m.Content
+	// Split the message into arguments using Fields to handle multiple spaces
+	args := strings.Fields(m.Content)
 
-	values := strings.Split(cmd, " ")
-	l := len(values)
-
-	if l == 4 {
-		hour := values[2]
-		country := values[3]
-
-		msg := GetHours(hour, country)
-		if msg == "" {
-			unsuccessfulMsg(s, m, `**Ups, no se puede mostrar equivalencia horaria**`)
-			return
-		}
-
-		_, _ = s.ChannelMessageSend(m.ChannelID, msg)
+	// Ensure the correct number of arguments
+	if len(args) != 4 {
+		unsuccessfulMsg(s, m, `Error en subcomando, ver ayuda con: **.go help**`)
 		return
 	}
 
-	unsuccessfulMsg(s, m, `Error en subcomando, ver ayuda con: **.go help**`)
+	hour := args[2]
+	country := args[3]
+
+	// Get the equivalent hours for the given country, handling errors
+	msg, err := GetHours(hour, country)
+	if err != nil {
+		unsuccessfulMsg(s, m, fmt.Sprintf("**Ups, no se puede mostrar equivalencia horaria: %s**", err))
+		return
+	}
+
+	_, _ = s.ChannelMessageSend(m.ChannelID, msg)
 }
 
 func msgChallenges(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cmd := m.Content
+	values := strings.Fields(cmd)
+	valuesLen := len(values)
 
-	values := strings.Split(cmd, " ")
-	l := len(values)
-
-	if l == 3 && values[2] == "help" {
-		msgCommands(s, m)
-		return
-	}
-
-	if l == 4 {
+	switch valuesLen {
+	case 3:
+		if values[2] == "help" {
+			msgCommands(s, m)
+			return
+		}
+	case 4:
 		level := values[2]
 		topic := values[3]
 
 		msg, err := GetChallenge(level, topic)
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
-				unsuccessfulMsg(s, m, `**Ups, sin desafios que coincidan**`)
+				unsuccessfulMsg(s, m, `**Ups, sin desafíos que coincidan**`)
 			}
 			return
 		}
@@ -136,9 +144,9 @@ func msgChallenges(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		_, _ = s.ChannelMessageSend(m.ChannelID, msg.ChallengeFmt())
 		return
+	default:
+		unsuccessfulMsg(s, m, `Error en subcomando, ver ayuda con: **.go challenge help**`)
 	}
-
-	unsuccessfulMsg(s, m, `Error en subcomando, ver ayuda con: **.go challenge help**`)
 }
 
 func msgCommands(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -161,6 +169,4 @@ func msgCommands(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else {
 		_, _ = s.ChannelMessageSend(m.ChannelID, msg.Text)
 	}
-
-	return
 }
