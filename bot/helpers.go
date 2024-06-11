@@ -1,7 +1,10 @@
 package bot
 
 import (
+	"crypto/rand"
+	"errors"
 	"log"
+	"math/big"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -47,4 +50,19 @@ func wordCase(s string) string {
 	}
 
 	return strings.ToUpper(s[:1]) + s[1:]
+}
+
+func intnCrypt(n int) (int, error) {
+	if n <= 0 {
+		return 0, errors.New("n must be greater than 0")
+	}
+
+	// rand number between [0, n]
+	bigN := big.NewInt(int64(n))
+	result, err := rand.Int(rand.Reader, bigN)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(result.Int64()), nil
 }

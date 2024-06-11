@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"math/rand"
 	"sort"
 	"strconv"
 	"strings"
@@ -28,7 +27,7 @@ func GetChallenge(level, topic string) (*chg.Challenge, error) {
 		return &chg.Challenge{}, sql.ErrNoRows
 	}
 
-	i := rand.Intn(l)
+	i, err := intnCrypt(l)
 
 	return &res[i], err
 }
@@ -46,7 +45,7 @@ func GetFact() (*chg.Fact, error) {
 		return &chg.Fact{}, sql.ErrNoRows
 	}
 
-	i := rand.Intn(l)
+	i, err := intnCrypt(l)
 
 	return &res[i], err
 }

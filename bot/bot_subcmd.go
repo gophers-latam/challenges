@@ -27,16 +27,6 @@ func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	/*
-			// OPTIONAL but NTH
-			// ensure there are at least two arguments to process subcommands
-		    if len(args) < 2 {
-		        // respond with a message indicating incomplete command
-		        s.ChannelMessageSend(m.ChannelID, "Incomplete command. Please provide a subcommand.")
-		        return
-		    }
-	*/
-
 	// process subcommands
 	switch args[1] {
 	case "facts":
@@ -54,8 +44,7 @@ func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func msgHello(s *discordgo.Session, m *discordgo.MessageCreate) {
-	_, _ = s.ChannelMessageSend(m.ChannelID,
-		`Hola **`+m.Author.Username+`**`)
+	_, _ = s.ChannelMessageSend(m.ChannelID, `Hola **`+m.Author.Username+`**`)
 }
 
 func msgFacts(s *discordgo.Session, m *discordgo.MessageCreate) {
