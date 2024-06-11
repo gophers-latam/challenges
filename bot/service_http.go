@@ -3,6 +3,7 @@ package bot
 import (
 	"bytes"
 	"database/sql"
+	"errors"
 	"fmt"
 	"math/rand"
 	"sort"
@@ -82,16 +83,31 @@ func GetCommand(cmd string) (*chg.Command, error) {
 	return &res[0], err
 }
 
-func GetHours(hour, country string) string {
+func GetHours(hour, country string) (string, error) {
 	var b bytes.Buffer
 	args := strings.Split(hour, ":")
-	h, _ := strconv.Atoi(args[0])
-	m, _ := strconv.Atoi(args[1])
+	if len(args) != 2 {
+		return "", errors.New("invalid time format. Please use HH:MM format")
+	}
+
+	h, err := strconv.Atoi(args[0])
+	if err != nil {
+		return "", errors.New("invalid hour format")
+	}
+	m, err := strconv.Atoi(args[1])
+	if err != nil {
+		return "", errors.New("invalid minute format")
+	}
 
 	countryCase := wordCase(country)
-	loc, err := time.LoadLocation(chg.TimeZones[countryCase].Timezone)
+	timeZoneInfo, ok := chg.TimeZones[countryCase]
+	if !ok {
+		return "", errors.New("unknown country")
+	}
+
+	loc, err := time.LoadLocation(timeZoneInfo.Timezone)
 	if err != nil {
-		return ""
+		return "", errors.New("unable to load timezone")
 	}
 
 	now := time.Now().UTC()
@@ -104,7 +120,7 @@ func GetHours(hour, country string) string {
 	}
 	sort.Strings(tzones)
 
-	b.WriteString(fmt.Sprintf("🕒 %s **%s**: `%s` hrs\n", chg.TimeZones[countryCase].Flag, countryCase, inTime.Format("15:04")))
+	b.WriteString(fmt.Sprintf("🕒 %s **%s**: `%s` hrs\n", timeZoneInfo.Flag, countryCase, inTime.Format("15:04")))
 	for _, tz := range tzones {
 		if tz == countryCase {
 			continue
@@ -117,5 +133,5 @@ func GetHours(hour, country string) string {
 		b.WriteString(fmt.Sprintf("🕒 %s **%s**: `%s` hrs\n", chg.TimeZones[tz].Flag, tz, lTime.Format("15:04")))
 	}
 
-	return b.String()
+	return b.String(), nil
 }
