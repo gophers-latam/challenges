@@ -1,4 +1,4 @@
-package bot
+package service_http
 
 import (
 	"bytes"
@@ -9,7 +9,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 
+	"github.com/gophers-latam/challenges/bot/helpers"
 	chg "github.com/gophers-latam/challenges/http"
 	"github.com/gophers-latam/challenges/storage"
 )
@@ -27,7 +29,7 @@ func GetChallenge(level, topic string) (*chg.Challenge, error) {
 		return &chg.Challenge{}, sql.ErrNoRows
 	}
 
-	i, err := intnCrypt(l)
+	i, err := helpers.IntnCrypt(l)
 
 	return &res[i], err
 }
@@ -45,7 +47,7 @@ func GetFact() (*chg.Fact, error) {
 		return &chg.Fact{}, sql.ErrNoRows
 	}
 
-	i, err := intnCrypt(l)
+	i, err := helpers.IntnCrypt(l)
 
 	return &res[i], err
 }
@@ -98,7 +100,14 @@ func GetHours(hour, country string) (string, error) {
 		return "", errors.New("invalid minute format")
 	}
 
-	countryCase := wordCase(country)
+	// Check if country has 2 characters and look up in FlagToCountry to assign the country
+	if utf8.RuneCountInString(country) == 2 {
+		if newCountry, ok := chg.FlagToCountry[strings.ToLower(country)]; ok {
+			country = newCountry
+		}
+	}
+
+	countryCase := helpers.WordCase(country)
 	timeZoneInfo, ok := chg.TimeZones[countryCase]
 	if !ok {
 		return "", errors.New("unknown country")

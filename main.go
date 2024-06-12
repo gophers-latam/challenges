@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	msg "github.com/gophers-latam/challenges/bot"
+	"github.com/gophers-latam/challenges/bot"
 	"github.com/gophers-latam/challenges/global"
 	chg "github.com/gophers-latam/challenges/http"
 	"github.com/gophers-latam/challenges/storage"
@@ -23,20 +23,23 @@ func main() {
 		log.Fatal("session error:", err.Error())
 	}
 
+	// Register SubCmdCommands
+	bot.SubCmdRegisterCommands()
+
 	// bot handlers
-	dg.AddHandler(msg.Stat)
-	dg.AddHandler(msg.SubCmd)
-	dg.AddHandler(msg.SlhCmd)
+	dg.AddHandler(bot.Stat)
+	dg.AddHandler(bot.HandleSubCmd)
+	dg.AddHandler(bot.SlhCmd)
 	dg.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
 	if err = dg.Open(); err != nil {
 		log.Fatal("bot error:", err.Error())
 	}
 
-	cmd := msg.InitSlhCmd(dg)
+	cmd := bot.InitSlhCmd(dg)
 
 	defer dg.Close()
-	defer msg.RemoveSlhCmd(dg, cmd) // to recreate all
+	defer bot.RemoveSlhCmd(dg, cmd) // to recreate all
 
 	// web handlers
 	storage.Migrate()

@@ -7,6 +7,8 @@ import (
 	"log"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/gophers-latam/challenges/bot/helpers"
+	"github.com/gophers-latam/challenges/bot/service_http"
 )
 
 var (
@@ -76,12 +78,12 @@ var (
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
-					Content: `Hola **` + i.Member.User.Username + `** ` + defaultMsg,
+					Content: `Hola **` + i.Member.User.Username + `** ` + helpers.DefaultMsg,
 				},
 			})
 		},
 		"help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			msg, _ := GetCommand(".go help")
+			msg, _ := service_http.GetCommand(".go help")
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
@@ -90,7 +92,7 @@ var (
 			})
 		},
 		"challenge_help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			msg, _ := GetCommand(".go challenge help")
+			msg, _ := service_http.GetCommand(".go challenge help")
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
@@ -116,10 +118,10 @@ var (
 				challengeType = option.StringValue()
 			}
 
-			msg, err := GetChallenge(level, challengeType)
+			msg, err := service_http.GetChallenge(level, challengeType)
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {
-					unsuccessfulInteraction(s, i, `**Ups, sin desafios que coincidan**`)
+					helpers.UnsuccessfulInteraction(s, i, `**Ups, sin desafios que coincidan**`)
 				}
 				return
 			}
@@ -132,10 +134,10 @@ var (
 			})
 		},
 		"facts": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			msg, err := GetFact()
+			msg, err := service_http.GetFact()
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {
-					unsuccessfulInteraction(s, i, `**Ups, sin hechos que mencionar**`)
+					helpers.UnsuccessfulInteraction(s, i, `**Ups, sin hechos que mencionar**`)
 				}
 				return
 			}
@@ -148,10 +150,10 @@ var (
 			})
 		},
 		"events": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			msg, err := GetEvents()
+			msg, err := service_http.GetEvents()
 			if err != nil {
 				if errors.Is(err, sql.ErrNoRows) {
-					unsuccessfulInteraction(s, i, `**Ups, sin eventos para mostrar**`)
+					helpers.UnsuccessfulInteraction(s, i, `**Ups, sin eventos para mostrar**`)
 				}
 				return
 			}
@@ -183,13 +185,13 @@ var (
 			}
 
 			if hour == "" || country == "" {
-				unsuccessfulInteraction(s, i, `**Ups, opciones de comando faltantes**`)
+				helpers.UnsuccessfulInteraction(s, i, `**Ups, opciones de comando faltantes**`)
 				return
 			}
 
-			msg, err := GetHours(hour, country)
+			msg, err := service_http.GetHours(hour, country)
 			if err != nil {
-				unsuccessfulInteraction(s, i, fmt.Sprintf("**Ups, no se puede mostrar equivalencia horaria: %s**", err))
+				helpers.UnsuccessfulInteraction(s, i, fmt.Sprintf("**Ups, no se puede mostrar equivalencia horaria: %s**", err))
 				return
 			}
 

@@ -1,33 +1,21 @@
-package bot
+package helpers
 
 import (
 	"crypto/rand"
 	"errors"
-	"log"
 	"math/big"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-const defaultMsg = `envia **.go help** para usar el gopherbot...`
+const DefaultMsg = `envia **.go help** para usar el gopherbot...`
 
-func Stat(discord *discordgo.Session, ready *discordgo.Ready) {
-	err := discord.UpdateStatusComplex(discordgo.UpdateStatusData{Status: "dnd"})
-	if err != nil {
-		log.Println(err.Error())
-	}
-
-	_ = discord.UpdateGameStatus(1, ".go help")
-	servers := discord.State.Guilds
-	log.Printf("Bot running on %d servers", len(servers))
-}
-
-func unsuccessfulMsg(s *discordgo.Session, m *discordgo.MessageCreate, t string) {
+func UnsuccessfulMsg(s *discordgo.Session, m *discordgo.MessageCreate, t string) {
 	_, _ = s.ChannelMessageSend(m.ChannelID, t)
 }
 
-func unsuccessfulInteraction(s *discordgo.Session, i *discordgo.InteractionCreate, t string) {
+func UnsuccessfulInteraction(s *discordgo.Session, i *discordgo.InteractionCreate, t string) {
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
@@ -36,7 +24,7 @@ func unsuccessfulInteraction(s *discordgo.Session, i *discordgo.InteractionCreat
 	})
 }
 
-func msgEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.MessageEmbed) {
+func MsgEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.MessageEmbed) {
 	if e.Author == nil {
 		e.URL = "https://dsc.gg/gophers-latam"
 	}
@@ -44,7 +32,7 @@ func msgEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.Mes
 	s.ChannelMessageSendEmbed(m.ChannelID, e)
 }
 
-func wordCase(s string) string {
+func WordCase(s string) string {
 	if len(s) == 0 {
 		return s
 	}
@@ -52,7 +40,7 @@ func wordCase(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-func intnCrypt(n int) (int, error) {
+func IntnCrypt(n int) (int, error) {
 	if n <= 0 {
 		return 0, errors.New("n must be greater than 0")
 	}
