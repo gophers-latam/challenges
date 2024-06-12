@@ -51,6 +51,8 @@ func (h *ChallengeCommand) Execute(s *discordgo.Session, m *discordgo.MessageCre
 
 // Help method for ChallengeCommand
 func (c *ChallengeCommand) Help() string {
-	return "Uso: .go challenge {nivel} {tipo} - Pedir desafío para practicar.\n" +
-		"Ejemplo: .go challenge ? ?"
+	return "Uso: .go challenge {nivel} {tipo_challenge} - Pedir desafío para practicar.\n" +
+		"Los niveles disponibles son: easy, medium, hard" +
+		"Los tipos disponibles son: backend, algorithm, concurrency, database, web, cli, frontend" +
+		"Ejemplo: .go challenge medium concurrency"
 }
