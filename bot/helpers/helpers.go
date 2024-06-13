@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"errors"
 	"math/big"
-	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -30,14 +29,6 @@ func MsgEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.Mes
 	}
 	e.Color = 0x78141b
 	s.ChannelMessageSendEmbed(m.ChannelID, e)
-}
-
-func WordCase(s string) string {
-	if len(s) == 0 {
-		return s
-	}
-
-	return strings.ToUpper(s[:1]) + s[1:]
 }
 
 func IntnCrypt(n int) (int, error) {

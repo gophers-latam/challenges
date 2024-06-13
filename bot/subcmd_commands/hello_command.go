@@ -14,5 +14,5 @@ func (h *HelloCommand) Execute(s *discordgo.Session, m *discordgo.MessageCreate)
 
 // Help method for HelloCommand
 func (h *HelloCommand) Help() string {
-	return "Uso: .go - Saludo del bot"
+	return "Uso: **.go** - Saludo del bot"
 }

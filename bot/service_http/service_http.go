@@ -100,14 +100,14 @@ func GetHours(hour, country string) (string, error) {
 		return "", errors.New("invalid minute format")
 	}
 
-	// Check if country has 2 characters and look up in FlagToCountry to assign the country
-	if utf8.RuneCountInString(country) == 2 {
-		if newCountry, ok := chg.FlagToCountry[strings.ToLower(country)]; ok {
+	// Check if country has 1 characters and look up in FlagToCountry to assign the country
+	if utf8.RuneCountInString(country) == 1 {
+		if newCountry, ok := chg.FlagToCountry[country]; ok {
 			country = newCountry
 		}
 	}
 
-	countryCase := helpers.WordCase(country)
+	countryCase := strings.ToLower(country)
 	timeZoneInfo, ok := chg.TimeZones[countryCase]
 	if !ok {
 		return "", errors.New("unknown country")

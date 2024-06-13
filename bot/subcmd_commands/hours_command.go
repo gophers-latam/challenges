@@ -39,6 +39,6 @@ func (h *HoursCommand) Execute(s *discordgo.Session, m *discordgo.MessageCreate)
 // Help method for HoursCommand
 func (h *HoursCommand) Help() string {
 	return "Uso: .go hours {HH:MM (formato 24h)} {país/emoji de bandera}\n" +
-		"Ejemplo: .go hours 14:30 argentina\n" +
-		"Ejemplo: .go hours 14:30 🇦🇷"
+		"Ejemplo: **.go hours 14:30 argentina**\n" +
+		"Ejemplo: **.go hours 14:30 🇦🇷**"
 }

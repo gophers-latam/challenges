@@ -34,5 +34,5 @@ func (h *FactsCommand) Execute(s *discordgo.Session, m *discordgo.MessageCreate)
 
 // Help method for FactsCommand
 func (f *FactsCommand) Help() string {
-	return "Uso: .go facts - Chistes internos de la comunidad, ejecútalo y te sorprenderás"
+	return "Uso: **.go facts** - Chistes internos de la comunidad, ejecútalo y te sorprenderás"
 }

@@ -29,5 +29,5 @@ func (h *EventsCommand) Execute(s *discordgo.Session, m *discordgo.MessageCreate
 
 // Help method for EventsCommand
 func (e *EventsCommand) Help() string {
-	return "Uso: .go events - Lista los eventos recurrentes del servidor"
+	return "Uso: **.go events** - Lista los eventos recurrentes del servidor"
 }
