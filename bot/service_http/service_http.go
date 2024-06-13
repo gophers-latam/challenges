@@ -1,4 +1,4 @@
-package bot
+package service_http
 
 import (
 	"bytes"
@@ -9,9 +9,13 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 
+	"github.com/gophers-latam/challenges/bot/helpers"
 	chg "github.com/gophers-latam/challenges/http"
 	"github.com/gophers-latam/challenges/storage"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func GetChallenge(level, topic string) (*chg.Challenge, error) {
@@ -27,7 +31,7 @@ func GetChallenge(level, topic string) (*chg.Challenge, error) {
 		return &chg.Challenge{}, sql.ErrNoRows
 	}
 
-	i, err := intnCrypt(l)
+	i, err := helpers.IntnCrypt(l)
 
 	return &res[i], err
 }
@@ -45,7 +49,7 @@ func GetFact() (*chg.Fact, error) {
 		return &chg.Fact{}, sql.ErrNoRows
 	}
 
-	i, err := intnCrypt(l)
+	i, err := helpers.IntnCrypt(l)
 
 	return &res[i], err
 }
@@ -98,7 +102,14 @@ func GetHours(hour, country string) (string, error) {
 		return "", errors.New("invalid minute format")
 	}
 
-	countryCase := wordCase(country)
+	// Check if country has 1 characters and look up in FlagToCountry to assign the country
+	if utf8.RuneCountInString(country) == 2 {
+		if newCountry, ok := chg.FlagToCountry[country]; ok {
+			country = newCountry
+		}
+	}
+
+	countryCase := cases.Title(language.Und).String(country)
 	timeZoneInfo, ok := chg.TimeZones[countryCase]
 	if !ok {
 		return "", errors.New("unknown country")

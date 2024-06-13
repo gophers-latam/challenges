@@ -1,6 +1,10 @@
 package http
 
-import "gorm.io/gorm"
+import (
+	"strings"
+
+	"gorm.io/gorm"
+)
 
 type (
 	Level         string
@@ -58,6 +62,8 @@ var TimeZones = map[string]CountryData{
 	"Venezuela":            {Timezone: "America/Caracas", Flag: "🇻🇪"},
 }
 
+var FlagToCountry = map[string]string{}
+
 type Command struct {
 	gorm.Model
 	Cmd  string `json:"cmd" gorm:"column:cmd;size:500"`
@@ -97,4 +103,10 @@ func (c Challenge) ChallengeFmt() string {
 		-**Level:** ` + string(c.Level) + ` -**Type:** ` + string(c.ChallengeType) + `
 		-**Description: ** ` + c.Description
 	return m
+}
+
+func init() {
+	for country, data := range TimeZones {
+		FlagToCountry[strings.ToLower(data.Flag)] = country
+	}
 }
