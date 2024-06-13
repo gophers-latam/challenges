@@ -2,6 +2,7 @@ package subcmd_commands
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/gophers-latam/challenges/bot/service_http"
 )
 
 // HelloCommand structure
@@ -13,6 +14,7 @@ func (h *HelloCommand) Execute(s *discordgo.Session, m *discordgo.MessageCreate)
 }
 
 // Help method for HelloCommand
-func (h *HelloCommand) Help() string {
-	return "Uso: **.go** - Saludo del bot"
+func (h *HelloCommand) Help(cmd string) string {
+	msg, _ := service_http.GetCommand(cmd + " help")
+	return msg.Text
 }

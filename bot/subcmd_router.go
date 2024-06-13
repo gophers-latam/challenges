@@ -21,7 +21,7 @@ func HandleSubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if isOnlyPrefix(args, global.Prefix) {
-		if helloCommand, ok := SubCmdCommands["hello"]; ok {
+		if helloCommand, ok := SubCmds["hello"]; ok {
 			helloCommand.Execute(s, m)
 		}
 		return
@@ -32,22 +32,26 @@ func HandleSubCmd(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func SubCmd(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-
 	cmd := args[1]
-	command, ok := SubCmdCommands[cmd]
+	command, ok := SubCmds[cmd]
 	if !ok {
 		subcmd_commands.MsgCommands(s, m)
 		return
 	}
 
+	// Check if the first argument is 'help'
+	if len(args) == 2 && strings.ToLower(args[1]) == "help" {
+		s.ChannelMessageSend(m.ChannelID, command.Help(args[0]))
+		return
+	}
+
 	// Check if the second argument is 'help'
-	if len(args) > 2 && strings.ToLower(args[2]) == "help" {
-		s.ChannelMessageSend(m.ChannelID, command.Help())
+	if len(args) == 3 && strings.ToLower(args[2]) == "help" {
+		s.ChannelMessageSend(m.ChannelID, command.Help(global.Prefix+" "+args[1]))
 		return
 	}
 
 	command.Execute(s, m)
-
 }
 
 // Helper function to check if the message is from the bot itself

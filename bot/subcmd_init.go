@@ -8,16 +8,16 @@ import (
 // Define the Command interface
 type Command interface {
 	Execute(s *discordgo.Session, m *discordgo.MessageCreate)
-	Help() string
+	Help(string) string
 }
 
-// Initialize the SubCmdCommands map
-var SubCmdCommands = map[string]Command{}
+// Initialize the SubCmds map
+var SubCmds = map[string]Command{}
 
-func SubCmdRegisterCommands() {
-	SubCmdCommands["hours"] = &subcmd_commands.HoursCommand{}
-	SubCmdCommands["challenge"] = &subcmd_commands.ChallengeCommand{}
-	SubCmdCommands["events"] = &subcmd_commands.EventsCommand{}
-	SubCmdCommands["facts"] = &subcmd_commands.FactsCommand{}
-	SubCmdCommands["hello"] = &subcmd_commands.HelloCommand{}
+func RegisterSubCmds() {
+	SubCmds["hours"] = &subcmd_commands.HoursCommand{}
+	SubCmds["challenge"] = &subcmd_commands.ChallengeCommand{}
+	SubCmds["events"] = &subcmd_commands.EventsCommand{}
+	SubCmds["facts"] = &subcmd_commands.FactsCommand{}
+	SubCmds["hello"] = &subcmd_commands.HelloCommand{}
 }

@@ -15,28 +15,26 @@ import (
 )
 
 func main() {
-	global.InitLogs()
-
 	config := global.GetConfig()
 	dg, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
 		log.Fatal("session error:", err.Error())
 	}
 
-	// Register SubCmdCommands
-	bot.SubCmdRegisterCommands()
+	// Register SubCmds
+	bot.RegisterSubCmds()
 
 	// bot handlers
 	dg.AddHandler(bot.Stat)
 	dg.AddHandler(bot.HandleSubCmd)
-	dg.AddHandler(bot.SlhCmd)
+	dg.AddHandler(bot.HandleSlhCmd)
 	dg.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
 	if err = dg.Open(); err != nil {
 		log.Fatal("bot error:", err.Error())
 	}
 
-	cmd := bot.InitSlhCmd(dg)
+	cmd := bot.RegisterSlhCmds(dg)
 
 	defer dg.Close()
 	defer bot.RemoveSlhCmd(dg, cmd) // to recreate all

@@ -20,11 +20,6 @@ func (h *ChallengeCommand) Execute(s *discordgo.Session, m *discordgo.MessageCre
 	valuesLen := len(values)
 
 	switch valuesLen {
-	case 3:
-		if values[2] == "help" {
-			MsgCommands(s, m)
-			return
-		}
 	case 4:
 		level := values[2]
 		topic := values[3]
@@ -50,9 +45,7 @@ func (h *ChallengeCommand) Execute(s *discordgo.Session, m *discordgo.MessageCre
 }
 
 // Help method for ChallengeCommand
-func (c *ChallengeCommand) Help() string {
-	return "Uso: .go challenge {nivel} {tipo_challenge} - Pedir desafío para practicar.\n" +
-		"- Los niveles disponibles son: easy, medium, hard\n" +
-		"- Los tipos disponibles son: backend, algorithm, concurrency, database, web, cli, frontend\n" +
-		"Ejemplo: **.go challenge medium concurrency**"
+func (h *ChallengeCommand) Help(cmd string) string {
+	msg, _ := service_http.GetCommand(cmd + " help")
+	return "Uso: " + msg.Text
 }

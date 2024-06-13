@@ -3,7 +3,9 @@ package global
 import (
 	"log"
 	"os"
+	"strings"
 
+	chg "github.com/gophers-latam/challenges/http"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )
@@ -34,6 +36,18 @@ func init() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("No .env file")
+	}
+
+	logger, err := zap.NewProduction()
+	_ = logger.Sync()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	zap.ReplaceGlobals(logger)
+
+	for country, data := range chg.TimeZones {
+		chg.FlagToCountry[strings.ToLower(data.Flag)] = country
 	}
 }
 
@@ -66,14 +80,4 @@ func GetConfig() Config {
 		DbUser: DbUser,
 		DbPass: DbPass,
 	}
-}
-
-func InitLogs() {
-	logger, err := zap.NewProduction()
-	_ = logger.Sync()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	zap.ReplaceGlobals(logger)
 }

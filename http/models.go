@@ -1,8 +1,6 @@
 package http
 
 import (
-	"strings"
-
 	"gorm.io/gorm"
 )
 
@@ -103,10 +101,4 @@ func (c Challenge) ChallengeFmt() string {
 		-**Level:** ` + string(c.Level) + ` -**Type:** ` + string(c.ChallengeType) + `
 		-**Description: ** ` + c.Description
 	return m
-}
-
-func init() {
-	for country, data := range TimeZones {
-		FlagToCountry[strings.ToLower(data.Flag)] = country
-	}
 }
