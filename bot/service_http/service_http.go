@@ -14,6 +14,8 @@ import (
 	"github.com/gophers-latam/challenges/bot/helpers"
 	chg "github.com/gophers-latam/challenges/http"
 	"github.com/gophers-latam/challenges/storage"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func GetChallenge(level, topic string) (*chg.Challenge, error) {
@@ -101,13 +103,13 @@ func GetHours(hour, country string) (string, error) {
 	}
 
 	// Check if country has 1 characters and look up in FlagToCountry to assign the country
-	if utf8.RuneCountInString(country) == 1 {
+	if utf8.RuneCountInString(country) == 2 {
 		if newCountry, ok := chg.FlagToCountry[country]; ok {
 			country = newCountry
 		}
 	}
 
-	countryCase := strings.ToLower(country)
+	countryCase := cases.Title(language.Und).String(country)
 	timeZoneInfo, ok := chg.TimeZones[countryCase]
 	if !ok {
 		return "", errors.New("unknown country")
