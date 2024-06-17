@@ -5,15 +5,22 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"image"
+	"image/color"
+	"image/png"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
 
+	svg "github.com/ajstarks/svgo"
+	"github.com/bwmarrin/discordgo"
 	"github.com/gophers-latam/challenges/bot/helpers"
 	chg "github.com/gophers-latam/challenges/http"
 	"github.com/gophers-latam/challenges/storage"
+	"github.com/srwiley/oksvg"
+	"github.com/srwiley/rasterx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -144,4 +151,60 @@ func GetHours(hour, country string) (string, error) {
 	}
 
 	return b.String(), nil
+}
+
+func GetGopher() *discordgo.File {
+	var buf bytes.Buffer
+	cv := svg.New(&buf)
+	width := 500
+	height := 500
+	cv.Start(width, height)
+	cv.Rect(0, 0, width, height, "fill:gray")
+
+	// Draw Gopher's body
+	body := helpers.RandColor()
+	cv.Ellipse(width/2, height/2, 150, 200, fmt.Sprintf("fill:rgb(%d,%d,%d)", body.R, body.G, body.B))
+	// Ears
+	cv.Ellipse(width/2-70, height/2-170, 30, 40, fmt.Sprintf("fill:rgb(%d,%d,%d)", body.R, body.G, body.B))
+	cv.Ellipse(width/2+70, height/2-170, 30, 40, fmt.Sprintf("fill:rgb(%d,%d,%d)", body.R, body.G, body.B))
+	// Draw Gopher's eyes
+	eye := color.RGBA{255, 255, 255, 255} // White color
+	cv.Circle(width/2-50, height/2-80, 30, fmt.Sprintf("fill:rgb(%d,%d,%d)", eye.R, eye.G, eye.B))
+	cv.Circle(width/2+50, height/2-80, 30, fmt.Sprintf("fill:rgb(%d,%d,%d)", eye.R, eye.G, eye.B))
+	// Draw Gopher's pupils
+	pupil := helpers.RandColor()
+	cv.Circle(width/2-50, height/2-80, 10, fmt.Sprintf("fill:rgb(%d,%d,%d)", pupil.R, pupil.G, pupil.B))
+	cv.Circle(width/2+50, height/2-80, 10, fmt.Sprintf("fill:rgb(%d,%d,%d)", pupil.R, pupil.G, pupil.B))
+	// Draw Gopher's teeth
+	teeth := color.RGBA{255, 255, 255, 255} // White color
+	cv.Rect(width/2-18, height/2-20, 15, 30, fmt.Sprintf("fill:rgb(%d,%d,%d)", teeth.R, teeth.G, teeth.B))
+	cv.Rect(width/2+3, height/2-20, 15, 30, fmt.Sprintf("fill:rgb(%d,%d,%d)", teeth.R, teeth.G, teeth.B))
+	// Draw Gopher's nose
+	nose := color.RGBA{0, 0, 0, 255} // Black color
+	cv.Circle(width/2, height/2-60, 15, fmt.Sprintf("fill:rgb(%d,%d,%d)", nose.R, nose.G, nose.B))
+	// Draw Gopher's feet
+	feet := color.RGBA{252, 208, 180, 255}
+	cv.Ellipse(width/2-70, height/2+180, 40, 20, fmt.Sprintf("fill:rgb(%d,%d,%d)", feet.R, feet.G, feet.B))
+	cv.Ellipse(width/2+70, height/2+180, 40, 20, fmt.Sprintf("fill:rgb(%d,%d,%d)", feet.R, feet.G, feet.B))
+	// Draw Gopher's arms
+	cv.Ellipse(width/2-110, height/2, 20, 50, fmt.Sprintf("fill:rgb(%d,%d,%d)", feet.R, feet.G, feet.B))
+	cv.Ellipse(width/2+110, height/2, 20, 50, fmt.Sprintf("fill:rgb(%d,%d,%d)", feet.R, feet.G, feet.B))
+
+	cv.End()
+
+	icon, _ := oksvg.ReadIconStream(bytes.NewReader([]byte(buf.String())))
+	icon.SetTarget(0, 0, float64(width), float64(height))
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	icon.Draw(rasterx.NewDasher(width, height, rasterx.NewScannerGV(width, height, rgba, rgba.Bounds())), 1)
+
+	var newBuf bytes.Buffer
+	_ = png.Encode(&newBuf, rgba)
+
+	file := &discordgo.File{
+		Name:        "gopher.png",
+		ContentType: "image/png",
+		Reader:      bytes.NewReader(newBuf.Bytes()),
+	}
+
+	return file
 }

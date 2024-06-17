@@ -3,6 +3,7 @@ package helpers
 import (
 	"crypto/rand"
 	"errors"
+	"image/color"
 	"math/big"
 
 	"github.com/bwmarrin/discordgo"
@@ -44,4 +45,18 @@ func IntnCrypt(n int) (int, error) {
 	}
 
 	return int(result.Int64()), nil
+}
+
+func RandColor() color.RGBA {
+	colors := []color.RGBA{
+		{255, 0, 0, 255},   // Red
+		{0, 255, 0, 255},   // Green
+		{0, 0, 255, 255},   // Blue
+		{255, 255, 0, 255}, // Yellow
+		{255, 0, 255, 255}, // Magenta
+		{0, 255, 255, 255}, // Cyan
+	}
+
+	n, _ := rand.Int(rand.Reader, big.NewInt(int64(len(colors))))
+	return colors[n.Int64()]
 }

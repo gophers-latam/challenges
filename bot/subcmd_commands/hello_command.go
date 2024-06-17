@@ -10,7 +10,10 @@ type HelloCommand struct{}
 
 // Execute method for HelloCommand
 func (h *HelloCommand) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
-	_, _ = s.ChannelMessageSend(m.ChannelID, `Hola **`+m.Author.Username+`**`)
+	img := service_http.GetGopher()
+
+	_, _ = s.ChannelMessageSend(m.ChannelID, "Hola <@"+m.Author.ID+">")
+	_, _ = s.ChannelFileSend(m.ChannelID, img.Name, img.Reader)
 }
 
 // Help method for HelloCommand

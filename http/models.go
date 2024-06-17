@@ -37,30 +37,31 @@ type CountryData struct {
 	Flag     string
 }
 
-var TimeZones = map[string]CountryData{
-	"Argentina":            {Timezone: "America/Argentina/Buenos_Aires", Flag: "🇦🇷"},
-	"Bolivia":              {Timezone: "America/La_Paz", Flag: "🇧🇴"},
-	"Brasil":               {Timezone: "America/Sao_Paulo", Flag: "🇧🇷"},
-	"Chile":                {Timezone: "America/Santiago", Flag: "🇨🇱"},
-	"Colombia":             {Timezone: "America/Bogota", Flag: "🇨🇴"},
-	"Costa_Rica":           {Timezone: "America/Costa_Rica", Flag: "🇨🇷"},
-	"Cuba":                 {Timezone: "America/Havana", Flag: "🇨🇺"},
-	"El_Salvador":          {Timezone: "America/El_Salvador", Flag: "🇸🇻"},
-	"Ecuador":              {Timezone: "America/Guayaquil", Flag: "🇪🇨"},
-	"Guatemala":            {Timezone: "America/Guatemala", Flag: "🇬🇹"},
-	"Honduras":             {Timezone: "America/Tegucigalpa", Flag: "🇭🇳"},
-	"Mexico":               {Timezone: "America/Mexico_City", Flag: "🇲🇽"},
-	"Nicaragua":            {Timezone: "America/Managua", Flag: "🇳🇮"},
-	"Panama":               {Timezone: "America/Panama", Flag: "🇵🇦"},
-	"Paraguay":             {Timezone: "America/Asuncion", Flag: "🇵🇾"},
-	"Peru":                 {Timezone: "America/Lima", Flag: "🇵🇪"},
-	"Puerto_Rico":          {Timezone: "America/Puerto_Rico", Flag: "🇵🇷"},
-	"Republica_Dominicana": {Timezone: "America/Santo_Domingo", Flag: "🇩🇴"},
-	"Uruguay":              {Timezone: "America/Montevideo", Flag: "🇺🇾"},
-	"Venezuela":            {Timezone: "America/Caracas", Flag: "🇻🇪"},
-}
-
-var FlagToCountry = map[string]string{}
+var (
+	TimeZones = map[string]CountryData{
+		"Argentina":            {Timezone: "America/Argentina/Buenos_Aires", Flag: "🇦🇷"},
+		"Bolivia":              {Timezone: "America/La_Paz", Flag: "🇧🇴"},
+		"Brasil":               {Timezone: "America/Sao_Paulo", Flag: "🇧🇷"},
+		"Chile":                {Timezone: "America/Santiago", Flag: "🇨🇱"},
+		"Colombia":             {Timezone: "America/Bogota", Flag: "🇨🇴"},
+		"Costa_Rica":           {Timezone: "America/Costa_Rica", Flag: "🇨🇷"},
+		"Cuba":                 {Timezone: "America/Havana", Flag: "🇨🇺"},
+		"El_Salvador":          {Timezone: "America/El_Salvador", Flag: "🇸🇻"},
+		"Ecuador":              {Timezone: "America/Guayaquil", Flag: "🇪🇨"},
+		"Guatemala":            {Timezone: "America/Guatemala", Flag: "🇬🇹"},
+		"Honduras":             {Timezone: "America/Tegucigalpa", Flag: "🇭🇳"},
+		"Mexico":               {Timezone: "America/Mexico_City", Flag: "🇲🇽"},
+		"Nicaragua":            {Timezone: "America/Managua", Flag: "🇳🇮"},
+		"Panama":               {Timezone: "America/Panama", Flag: "🇵🇦"},
+		"Paraguay":             {Timezone: "America/Asuncion", Flag: "🇵🇾"},
+		"Peru":                 {Timezone: "America/Lima", Flag: "🇵🇪"},
+		"Puerto_Rico":          {Timezone: "America/Puerto_Rico", Flag: "🇵🇷"},
+		"Republica_Dominicana": {Timezone: "America/Santo_Domingo", Flag: "🇩🇴"},
+		"Uruguay":              {Timezone: "America/Montevideo", Flag: "🇺🇾"},
+		"Venezuela":            {Timezone: "America/Caracas", Flag: "🇻🇪"},
+	}
+	FlagToCountry = map[string]string{}
+)
 
 type Command struct {
 	gorm.Model
