@@ -59,6 +59,7 @@ var (
 		"Republica_Dominicana": {Timezone: "America/Santo_Domingo", Flag: "🇩🇴"},
 		"Uruguay":              {Timezone: "America/Montevideo", Flag: "🇺🇾"},
 		"Venezuela":            {Timezone: "America/Caracas", Flag: "🇻🇪"},
+		"España":               {Timezone: "Europe/Madrid", Flag: "🇪🇸"},
 	}
 	FlagToCountry = map[string]string{}
 )
