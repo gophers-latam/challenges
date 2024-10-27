@@ -1,3 +1,20 @@
+### Testing
+Para testear localmente el bot, se debera agregar un archivo `.env`, con los siguientes valores:
+
+```env
+DEV_TOKEN=
+DEV_PORT=
+DEV_DBHOST=
+DEV_DBNAME=
+DEV_DBUSER=
+DEV_DBPASS=
+```
+Para contar con un token local de desarrollador, se debera de seguir la siguiente [documentacion](https://www.writebots.com/discord-bot-token/).
+Ademas, **si se requieren accesos a las bases productivas, hablar con**: [@thiagomowszet](https://github.com/thiagomowszet) [@zeroidentidad](https://github.com/zeroidentidad) [@jamsmendez](https://github.com/JamsMendez).
+
+De lo contrario, crear y modificar los valores con datos locales.
+
+
 ### Main 3rd libs:
 
 - https://github.com/bwmarrin/discordgo
