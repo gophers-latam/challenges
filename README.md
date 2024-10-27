@@ -14,6 +14,8 @@ Ademas, **si se requieren accesos a las bases productivas, hablar con**: [@thiag
 
 De lo contrario, crear y modificar los valores con datos locales.
 
+Para agregarlo en un canal de discord, ir a [GopherBot](https://gopherbot.onrender.com/), luego clickear en `add Gopherbot`. De esta manera podemos crear un canal aparte, agregar el bot y testearlo con los fix/bugs/features deseados.
+
 
 ### Main 3rd libs:
 
