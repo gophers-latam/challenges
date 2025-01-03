@@ -16,6 +16,7 @@ De lo contrario, crear y modificar los valores con datos locales.
 
 Para agregarlo en un canal de discord, ir a [GopherBot](https://gopherbot.onrender.com/), luego clickear en `add Gopherbot`. De esta manera podemos crear un canal aparte, agregar el bot y testearlo con los fix/bugs/features deseados.
 
+<hr style="height:3px;border-width:0;color:gray;background-color:gray">
 
 ### Main 3rd libs:
 
@@ -42,11 +43,5 @@ Para agregarlo en un canal de discord, ir a [GopherBot](https://gopherbot.onrend
 - Form to add challenges: https://gopherbot.onrender.com
 
 ### TODO:
-
-[] Improve readme
-
-[] Add idea for `.go faq` command
-
-[] Add idea for `.go redirects` command
 
 [] Resolve [issues](https://github.com/gophers-latam/challenges/issues)

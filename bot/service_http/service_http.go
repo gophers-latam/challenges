@@ -208,3 +208,21 @@ func GetGopher() *discordgo.File {
 
 	return file
 }
+
+func GetWaifu() (*chg.Waifu, error) {
+	var res []chg.Waifu
+
+	err := storage.Get().Find(&res).Error
+	if err != nil {
+		return &chg.Waifu{}, err
+	}
+
+	l := len(res)
+	if l == 0 {
+		return &chg.Waifu{}, sql.ErrNoRows
+	}
+
+	i, err := helpers.IntnCrypt(l)
+
+	return &res[i], err
+}
