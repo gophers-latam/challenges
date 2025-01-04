@@ -80,6 +80,11 @@ type Event struct {
 	Text string `json:"text" gorm:"column:text;size:5000"`
 }
 
+type Waifu struct {
+	gorm.Model
+	Path string `json:"path" gorm:"column:path;size:5000"`
+}
+
 type Challenge struct {
 	gorm.Model
 	Description   string        `json:"description" gorm:"column:description;size:15000"`

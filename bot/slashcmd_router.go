@@ -8,7 +8,6 @@ import (
 )
 
 var commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
-	// TODO: refactor to strategy
 	"bot":            slashcmd_commands.SlashHello,
 	"help":           slashcmd_commands.SlashHelp,
 	"challenge_help": slashcmd_commands.SlashChallengeHelp,
@@ -16,6 +15,7 @@ var commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.Interac
 	"facts":          slashcmd_commands.SlashFacts,
 	"events":         slashcmd_commands.SlashEvents,
 	"hours":          slashcmd_commands.SlashHours,
+	"waifu":          slashcmd_commands.SlashWaifus,
 }
 
 func HandleSlhCmd(s *discordgo.Session, i *discordgo.InteractionCreate) {

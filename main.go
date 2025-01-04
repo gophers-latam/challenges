@@ -37,7 +37,8 @@ func main() {
 	cmd := bot.RegisterSlhCmds(dg)
 
 	defer dg.Close()
-	defer bot.RemoveSlhCmd(dg, cmd) // to recreate all
+	// RemoveSlhCmd: please in development environment turn off before last run
+	defer bot.RemoveSlhCmd(dg, cmd)
 
 	// web handlers
 	storage.Migrate()

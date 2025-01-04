@@ -65,6 +65,10 @@ var commands = []*discordgo.ApplicationCommand{
 			},
 		},
 	},
+	{
+		Name:        "waifu",
+		Description: "Show .go waifu",
+	},
 }
 
 func RegisterSlhCmds(s *discordgo.Session) []*discordgo.ApplicationCommand {

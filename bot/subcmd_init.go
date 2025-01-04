@@ -15,6 +15,7 @@ type Command interface {
 var SubCmds = map[string]Command{}
 
 func RegisterSubCmds() {
+	SubCmds["waifu"] = &subcmd_commands.WaifusCommand{}
 	SubCmds["hours"] = &subcmd_commands.HoursCommand{}
 	SubCmds["challenge"] = &subcmd_commands.ChallengeCommand{}
 	SubCmds["events"] = &subcmd_commands.EventsCommand{}
