@@ -22,3 +22,5 @@ func RegisterSubCmds() {
 	SubCmds["facts"] = &subcmd_commands.FactsCommand{}
 	SubCmds["hello"] = &subcmd_commands.HelloCommand{}
 }
+
+// MsgCommands[...] handles: awesome, media and {cmd} help from db.

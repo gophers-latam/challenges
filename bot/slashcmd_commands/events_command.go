@@ -18,12 +18,23 @@ func SlashEvents(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		return
 	}
 
-	for _, e := range *msg {
-		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: e.Text,
-			},
-		})
+	// Init type slash InteractionRespond
+	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: (*msg)[0].Text,
+		},
+	})
+	if err != nil {
+		helpers.UnsuccessfulInteraction(s, i, `**Ups, error enviando evento inicial**`)
+		return
+	}
+
+	// Send remaining messages with ChannelMessageSend
+	for _, e := range (*msg)[1:] {
+		_, err := s.ChannelMessageSend(i.ChannelID, e.Text)
+		if err != nil {
+			_, _ = s.ChannelMessageSend(i.ChannelID, `**Ups, error enviando resto de eventos**`)
+		}
 	}
 }

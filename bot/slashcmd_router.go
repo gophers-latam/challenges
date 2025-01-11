@@ -16,6 +16,7 @@ var commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.Interac
 	"events":         slashcmd_commands.SlashEvents,
 	"hours":          slashcmd_commands.SlashHours,
 	"waifu":          slashcmd_commands.SlashWaifus,
+	"media":          slashcmd_commands.SlashMedia,
 }
 
 func HandleSlhCmd(s *discordgo.Session, i *discordgo.InteractionCreate) {

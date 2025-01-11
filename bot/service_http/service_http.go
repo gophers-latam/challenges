@@ -45,20 +45,25 @@ func GetChallenge(level, topic string) (*chg.Challenge, error) {
 
 func GetFact() (*chg.Fact, error) {
 	var res []chg.Fact
+	var count int64
 
-	err := storage.Get().Find(&res).Error
+	storage.Get().Model(&chg.Fact{}).Count(&count)
+
+	i, err := helpers.IntnCrypt(int(count))
+	if i == 0 {
+		i++
+	}
+
+	err = storage.Get().Find(&res, "id = ?", i).Error
 	if err != nil {
 		return &chg.Fact{}, err
 	}
 
-	l := len(res)
-	if l == 0 {
+	if len(res) == 0 {
 		return &chg.Fact{}, sql.ErrNoRows
 	}
 
-	i, err := helpers.IntnCrypt(l)
-
-	return &res[i], err
+	return &res[0], err
 }
 
 func GetEvents() (*[]chg.Event, error) {
@@ -211,18 +216,23 @@ func GetGopher() *discordgo.File {
 
 func GetWaifu() (*chg.Waifu, error) {
 	var res []chg.Waifu
+	var count int64
 
-	err := storage.Get().Find(&res).Error
+	storage.Get().Model(&chg.Waifu{}).Count(&count)
+
+	i, err := helpers.IntnCrypt(int(count))
+	if i == 0 {
+		i++
+	}
+
+	err = storage.Get().Find(&res, "id = ?", i).Error
 	if err != nil {
 		return &chg.Waifu{}, err
 	}
 
-	l := len(res)
-	if l == 0 {
+	if len(res) == 0 {
 		return &chg.Waifu{}, sql.ErrNoRows
 	}
 
-	i, err := helpers.IntnCrypt(l)
-
-	return &res[i], err
+	return &res[0], err
 }
