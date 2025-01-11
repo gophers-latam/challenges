@@ -27,3 +27,13 @@ func SlashHelp(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		},
 	})
 }
+
+func SlashMedia(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	msg, _ := service_http.GetCommand(".go media")
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: msg.Text,
+		},
+	})
+}

@@ -19,11 +19,11 @@ var commands = []*discordgo.ApplicationCommand{
 	},
 	{
 		Name:        "challenge_help",
-		Description: "Show challenges help",
+		Description: "Show .go challenges help",
 	},
 	{
 		Name:        "challenge",
-		Description: "Get challenge",
+		Description: "Show .go challenge",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
@@ -49,7 +49,7 @@ var commands = []*discordgo.ApplicationCommand{
 	},
 	{
 		Name:        "hours",
-		Description: "Get hours LATAM",
+		Description: "Show .go hours (LATAM)",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionString,
@@ -68,6 +68,10 @@ var commands = []*discordgo.ApplicationCommand{
 	{
 		Name:        "waifu",
 		Description: "Show .go waifu",
+	},
+	{
+		Name:        "media",
+		Description: "Show .go media",
 	},
 }
 
