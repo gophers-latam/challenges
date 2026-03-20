@@ -45,7 +45,7 @@ func main() {
 	wa := chg.WebApp{DB: storage.Get(), Port: config.Port}
 	go func() {
 		zap.L().Fatal("web error:",
-			zap.Error(wa.App().Listen(":"+wa.Port)),
+			zap.Error(wa.App().Listen("0.0.0.0:"+wa.Port)),
 		)
 	}()
 
